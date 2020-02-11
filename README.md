@@ -4,7 +4,7 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-* Quick summary
+* This repository will store all the code related to STM32 projects.
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
