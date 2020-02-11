@@ -2,7 +2,7 @@
  * STM32L475xx.h
  *
  *  Created on: Feb 10, 2020
- *      Author: yao
+ *      Author: Yao
  */
 
 #ifndef INC_STM32L475XX_H_
