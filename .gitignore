@@ -80,3 +80,5 @@ ctrlp.root
 *.html
 
 RemoteSystemsTempFiles/.project
+
+STM32L4xx_DRIVERS/Debug/
