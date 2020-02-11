@@ -78,3 +78,5 @@ ctrlp.root
 
 #html
 *.html
+
+RemoteSystemsTempFiles/.project
