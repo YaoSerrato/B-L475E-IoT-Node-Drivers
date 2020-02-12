@@ -8,6 +8,8 @@
 #ifndef INC_STM32L475XX_H_
 #define INC_STM32L475XX_H_
 
+#include <stdint.h>
+
 #define	__vo						volatile
 
 /* Base addresses for Flash and SRAM memories */
@@ -120,6 +122,7 @@ typedef struct
 
 #define	RCC							((RCC_RegDef_t*) RCC_BASE_ADDRESS)
 
+/* ------------------------------------------------------------------------------------------------------------------------- */
 /* Clock enable macros for GPIOx peripherals */
 #define	GPIOA_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 0))
 #define	GPIOB_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 1))
@@ -131,7 +134,14 @@ typedef struct
 #define	GPIOH_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 7))
 
 /* Clock disable macros for GPIOx peripherals */
-#define	GPIOA_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 0))
+#define	GPIOA_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 0))
+#define	GPIOB_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 1))
+#define	GPIOC_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 2))
+#define	GPIOD_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 3))
+#define	GPIOE_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 4))
+#define	GPIOF_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 5))
+#define	GPIOG_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 6))
+#define	GPIOH_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 7))
 
 
 #endif /* INC_STM32L475XX_H_ */
