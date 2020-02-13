@@ -90,7 +90,9 @@ void GPIO_Init(GPIO_Handle_t* pGPIOHandle)
 	{
 		/* This means that the mode will be from 00 to 11 only */
 		temp = pGPIOHandle->GPIO_PinConfig.GPIO_PinMode << (2*(pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber));
-		pGPIOHandle->pGPIOx->GPIO_MODER &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		pGPIOHandle->pGPIOx->GPIO_MODER &= ~(0x3 << 2*(pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber));
+		//pGPIOHandle->pGPIOx->GPIO_MODER &= (0xCFFFFFFF);
+		//pGPIOHandle->pGPIOx->GPIO_MODER |= 0x10000000;
 		pGPIOHandle->pGPIOx->GPIO_MODER |= temp;
 	}
 	else
@@ -101,19 +103,19 @@ void GPIO_Init(GPIO_Handle_t* pGPIOHandle)
 
 	/* 2. Configure the speed */
 	temp = pGPIOHandle->GPIO_PinConfig.GPIO_PinSpeed << (2*(pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber));
-	pGPIOHandle->pGPIOx->GPIO_OSPEEDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+	pGPIOHandle->pGPIOx->GPIO_OSPEEDR &= ~(0x3 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 	pGPIOHandle->pGPIOx->GPIO_OSPEEDR |= temp;
 	temp = 0;
 
 	/* 3. Configure the pull-up/pull-down */
 	temp = pGPIOHandle->GPIO_PinConfig.GPIO_PinPuPdControl << (2*(pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber));
-	pGPIOHandle->pGPIOx->GPIO_PUPDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+	pGPIOHandle->pGPIOx->GPIO_PUPDR &= ~(0x3 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 	pGPIOHandle->pGPIOx->GPIO_PUPDR |= temp;
 	temp = 0;
 
 	/* 4. Configure the output type */
 	temp = pGPIOHandle->GPIO_PinConfig.GPIO_PinOType << (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
-	pGPIOHandle->pGPIOx->GPIO_OTYPER &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+	pGPIOHandle->pGPIOx->GPIO_OTYPER &= ~(0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 	pGPIOHandle->pGPIOx->GPIO_OTYPER |= temp;
 	temp = 0;
 
@@ -124,12 +126,12 @@ void GPIO_Init(GPIO_Handle_t* pGPIOHandle)
 
 		if((pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber >= 0) && (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber <= 7))
 		{
-			pGPIOHandle->pGPIOx->GPIO_AFRL &= ~(0x0F << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			pGPIOHandle->pGPIOx->GPIO_AFRL &= ~(0xF << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 			pGPIOHandle->pGPIOx->GPIO_AFRL |= temp;
 		}
 		else if((pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber > 7) && (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber <= 15))
 		{
-			pGPIOHandle->pGPIOx->GPIO_AFRH &= ~(0x0F << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			pGPIOHandle->pGPIOx->GPIO_AFRH &= ~(0xF << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 			pGPIOHandle->pGPIOx->GPIO_AFRH |= temp;
 		}
 	}
