@@ -7,12 +7,15 @@
 
 #include <stm32l475xx.h>
 #include <stm32l475xx_gpio_driver.h>
+#include <stm32l475xx_rcc_driver.h>
 
 void delay(void);
+void App_RCC_Init(void);
 void App_GPIO_Init(void);
 
 int main()
 {
+	App_RCC_Init();
 	App_GPIO_Init();
 
 	while(1)
@@ -25,6 +28,11 @@ int main()
 void delay(void)
 {
 	for(uint64_t i = 0 ; i < 20000 ; i++);
+}
+
+void App_RCC_Init(void)
+{
+	RCC_Config_MSI(RCC_MSISPEED_1M, (uint8_t) 0);
 }
 
 void App_GPIO_Init(void)

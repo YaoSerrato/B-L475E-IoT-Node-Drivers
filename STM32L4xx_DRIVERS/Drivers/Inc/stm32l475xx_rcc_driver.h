@@ -44,28 +44,28 @@ extern "C"
 /******************************************************************************/
   /* TYPEDEFS */
 /******************************************************************************/
-typedef struct
-{
-	uint32_t	OscillatorType;
-	uint32_t	HSEState;
-	uint32_t	LSEState;
-	uint32_t	HSIState;
-	uint32_t	HSICalibrationValue;
-	uint32_t	LSIState;
-	uint32_t	MSIState;
-	uint32_t	MSICalibrationValue;
-	uint32_t	MSIClockRange;
-	/* PLL struct configuration */
-}RCC_OscConfig_t;
+//typedef struct
+//{
+//	uint32_t	OscillatorType;
+//	uint32_t	HSEState;
+//	uint32_t	LSEState;
+//	uint32_t	HSIState;
+//	uint32_t	HSICalibrationValue;
+//	uint32_t	LSIState;
+//	uint32_t	MSIState;
+//	uint32_t	MSICalibrationValue;
+//	uint32_t	MSIClockRange;
+//	/* PLL struct configuration */
+//}RCC_OscConfig_t;
 
-typedef struct
-{
-	RCC_RegDef_t		*pRCC;					/**< This will hold the base address of the RCC peripheral */
-	RCC_OscConfig_t		RCC_OscConfig_t;		/**< This is for configuring the oscillator */
-}RCC_Handle_t;
+//typedef struct
+//{
+//	RCC_RegDef_t		*pRCC;					/**< This will hold the base address of the RCC peripheral */
+//	RCC_OscConfig_t		RCC_OscConfig_t;		/**< This is for configuring the oscillator */
+//}RCC_Handle_t;
 
 
-void RCC_Config_MSI(uint8_t MSIspeed);
+void RCC_Config_MSI(uint32_t MSIspeed, uint8_t CalValue);
 void RCC_Config_LSI(void);
 void RCC_Config_HSI(void);
 void RCC_Config_PLLCLK(void);
