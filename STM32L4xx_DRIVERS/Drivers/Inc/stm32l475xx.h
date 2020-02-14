@@ -18,6 +18,9 @@
 #define	RESET						DISABLE
 #define	GPIO_PIN_SET				SET
 #define	GPIO_PIN_RESET				RESET
+#define READ_REG_BIT(REG, N)		((((unsigned) REG) >> (N)) & (1))
+#define SET_REG_BIT(REG, N)			(REG |=  (1<<N))
+#define CLR_REG_BIT(REG, N) 		(REG &= ~(1<<N))
 
 /* Base addresses for Flash and SRAM memories */
 #define	FLASH_BASE_ADDRESS			(0x08000000U)

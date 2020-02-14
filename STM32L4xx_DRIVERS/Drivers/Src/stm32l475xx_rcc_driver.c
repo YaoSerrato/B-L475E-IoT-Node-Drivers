@@ -9,21 +9,30 @@
 
 void RCC_Config_MSI(uint32_t MSIspeed, uint8_t CalValue)
 {
-	/* Configure MSI range */
-	RCC->RCC_CR |= 0x00000008;			// MSIRGSEL
-	RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
+	if(READ_REG_BIT(RCC->RCC_CR, 0) == 0 || READ_REG_BIT(RCC->RCC_CR, 1))
+	{
+		/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
+		 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
 
-	/* Trim/calibrate the MSI oscillator */
-	RCC->RCC_ICSCR |= ((uint32_t) CalValue) << 8;
+		/* Configure MSI range */
+		RCC->RCC_CR &= ~(0xF << 4);
+		RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
+		SET_REG_BIT(RCC->RCC_CR, 3);		// MSIRGSEL
 
-	/* Wait for MSI clock signal to stabilize */
-	while((RCC->RCC_CR & 0x00000002 >> 1) == 0){}		// MSIRDY
+		/* Trim/calibrate the MSI oscillator */
+		RCC->RCC_ICSCR |= ((uint32_t) CalValue) << 8;
 
-	/* Select MSI as SYSCLK source clock */
-	RCC->RCC_CFGR |= 0x0;
+		/* Select MSI as SYSCLK source clock */
+		CLR_REG_BIT(RCC->RCC_CFGR, 0);
+		CLR_REG_BIT(RCC->RCC_CFGR, 1);
 
-	/* Enable MSI clock source */
-	RCC->RCC_CR |= (0x1 << 0);			// MSION
+		/* Enable MSI clock source */
+		SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
+
+		/* Wait for MSI clock signal to stabilize */
+		while(READ_REG_BIT(RCC->RCC_CR, 1) == 0);		// MSIRDY
+
+	}
 
 	/* Registers to modify */
 	// RCC_CR
@@ -34,4 +43,10 @@ void RCC_Config_MSI(uint32_t MSIspeed, uint8_t CalValue)
 		// HPRE
 	// RCC_CSR
 		// MSISRANGE
+}
+
+void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
+{
+	RCC->RCC_CFGR |= (MCOprescaler << 28);
+	RCC->RCC_CFGR |= (MCOoutput << 24);
 }

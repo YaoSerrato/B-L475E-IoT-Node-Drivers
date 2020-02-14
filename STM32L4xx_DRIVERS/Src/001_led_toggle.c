@@ -32,12 +32,14 @@ void delay(void)
 
 void App_RCC_Init(void)
 {
-	RCC_Config_MSI(RCC_MSISPEED_1M, (uint8_t) 0);
+	RCC_Config_MSI(RCC_MSISPEED_48M, (uint8_t) 0);
+	RCC_Config_MCO(0, 2);
 }
 
 void App_GPIO_Init(void)
 {
 	GPIO_Handle_t GPIO_LED1;
+	GPIO_Handle_t GPIO_MCO;
 
 	GPIO_LED1.pGPIOx = GPIOB;
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
@@ -47,4 +49,14 @@ void App_GPIO_Init(void)
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
 	GPIO_PeriphClkControl(GPIOB, ENABLE);
 	GPIO_Init(&GPIO_LED1);
+
+	GPIO_MCO.pGPIOx = GPIOA;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_8;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinAltFunMode = GPIO_ALTFN_AF0;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_VERYHIGH;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
+	GPIO_MCO.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
+	GPIO_PeriphClkControl(GPIOA, ENABLE);
+	GPIO_Init(&GPIO_MCO);
 }

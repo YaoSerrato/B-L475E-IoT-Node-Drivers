@@ -69,6 +69,7 @@ void RCC_Config_MSI(uint32_t MSIspeed, uint8_t CalValue);
 void RCC_Config_LSI(void);
 void RCC_Config_HSI(void);
 void RCC_Config_PLLCLK(void);
+void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput);
 
 #ifdef __cplusplus
 }
