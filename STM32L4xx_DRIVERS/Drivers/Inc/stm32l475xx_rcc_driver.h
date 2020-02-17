@@ -41,34 +41,40 @@ extern "C"
 #define	RCC_MSISPEED_32M		(10)
 #define	RCC_MSISPEED_48M		(11)
 
+#define	RCC_MCOPRE_DIV1			(0)
+#define	RCC_MCOPRE_DIV2			(1)
+#define	RCC_MCOPRE_DIV4			(2)
+#define	RCC_MCOPRE_DIV8			(3)
+#define	RCC_MCOPRE_DIV16		(4)
+
+#define	RCC_MCOSEL_NOMCO		(0)
+#define	RCC_MCOSEL_SYSCLK		(1)
+#define	RCC_MCOSEL_MSI			(2)
+#define	RCC_MCOSEL_HSI16		(3)
+#define	RCC_MCOSEL_HSE			(4)
+#define	RCC_MCOSEL_PLLCLK		(5)
+#define	RCC_MCOSEL_LSI			(6)
+#define	RCC_MCOSEL_LSE			(7)
+#define	RCC_MCOSEL_HSI48		(8)
+
+#define	RCC_SYSCLK_MSI			(0)
+#define	RCC_SYSCLK_HSI16		(1)
+#define	RCC_SYSCLK_HSE			(2)
+#define	RCC_SYSCLK_PLL			(3)
+
 /******************************************************************************/
   /* TYPEDEFS */
 /******************************************************************************/
-//typedef struct
-//{
-//	uint32_t	OscillatorType;
-//	uint32_t	HSEState;
-//	uint32_t	LSEState;
-//	uint32_t	HSIState;
-//	uint32_t	HSICalibrationValue;
-//	uint32_t	LSIState;
-//	uint32_t	MSIState;
-//	uint32_t	MSICalibrationValue;
-//	uint32_t	MSIClockRange;
-//	/* PLL struct configuration */
-//}RCC_OscConfig_t;
+typedef enum
+{
+	RCC_STATUS_OK = 0,
+	RCC_STATUS_ERROR = 1
+}RCC_STATUS;
 
-//typedef struct
-//{
-//	RCC_RegDef_t		*pRCC;					/**< This will hold the base address of the RCC peripheral */
-//	RCC_OscConfig_t		RCC_OscConfig_t;		/**< This is for configuring the oscillator */
-//}RCC_Handle_t;
-
-
-void RCC_Config_MSI(uint32_t MSIspeed, uint8_t CalValue);
-void RCC_Config_LSI(void);
-void RCC_Config_HSI(void);
-void RCC_Config_PLLCLK(void);
+RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue);
+RCC_STATUS RCC_Config_LSI(void);
+RCC_STATUS RCC_Config_HSI(void);
+RCC_STATUS RCC_Config_PLLCLK(void);
 void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput);
 
 #ifdef __cplusplus
