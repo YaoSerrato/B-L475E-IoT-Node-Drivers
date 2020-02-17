@@ -6,12 +6,9 @@
  */
 
 #include <stm32l475xx.h>
+#include <led_toggle.h>
 #include <stm32l475xx_gpio_driver.h>
 #include <stm32l475xx_rcc_driver.h>
-
-void delay(void);
-void App_RCC_Init(void);
-void App_GPIO_Init(void);
 
 int main()
 {
@@ -22,6 +19,12 @@ int main()
 	{
 		GPIO_TogglePin(GPIOB, GPIO_PIN_14);
 		delay();
+		//GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+		//delay();
+		//GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		//delay();
+		//GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+		//delay();
 	}
 }
 
@@ -32,23 +35,37 @@ void delay(void)
 
 void App_RCC_Init(void)
 {
-	RCC_Config_MSI(RCC_MSISPEED_48M, (uint8_t) 0);
-	RCC_Config_MCO(0, 2);
+	if(RCC_Config_MSI(RCC_MSISPEED_4M, 0x0U) != RCC_STATUS_OK)
+	{
+		Error_Handler();
+	}
+
+	RCC_Config_MCO(RCC_MCOPRE_DIV1, RCC_MCOSEL_MSI);
 }
 
 void App_GPIO_Init(void)
 {
 	GPIO_Handle_t GPIO_LED1;
+	GPIO_Handle_t GPIO_LED2;
 	GPIO_Handle_t GPIO_MCO;
 
-	GPIO_LED1.pGPIOx = GPIOB;
-	GPIO_LED1.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
+	GPIO_LED1.pGPIOx = GPIOA;
+	GPIO_LED1.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_5;
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_LOW;
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
 	GPIO_LED1.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
-	GPIO_PeriphClkControl(GPIOB, ENABLE);
+	GPIO_PeriphClkControl(GPIOA, ENABLE);
 	GPIO_Init(&GPIO_LED1);
+
+	GPIO_LED2.pGPIOx = GPIOB;
+	GPIO_LED2.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
+	GPIO_LED2.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
+	GPIO_LED2.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_LOW;
+	GPIO_LED2.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
+	GPIO_LED2.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
+	GPIO_PeriphClkControl(GPIOB, ENABLE);
+	GPIO_Init(&GPIO_LED2);
 
 	GPIO_MCO.pGPIOx = GPIOA;
 	GPIO_MCO.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_8;
@@ -59,4 +76,9 @@ void App_GPIO_Init(void)
 	GPIO_MCO.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
 	GPIO_PeriphClkControl(GPIOA, ENABLE);
 	GPIO_Init(&GPIO_MCO);
+}
+
+void Error_Handler(void)
+{
+	while(1);
 }
