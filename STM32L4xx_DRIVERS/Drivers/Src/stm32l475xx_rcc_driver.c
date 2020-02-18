@@ -7,14 +7,26 @@
 
 #include <stm32l475xx_rcc_driver.h>
 
-RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue)
+uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
+								8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+
+RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint32_t AHB_Prescaler)
 {
 	RCC_STATUS status;
+	uint32_t freq_new = 0;
+	uint32_t freq_SYSCLK = 0;
+	uint32_t freq_HCLK = 0;
 
 	if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
 	{
 		/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
 		 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
+
+		/* Get current SYSCLK */
+		freq_SYSCLK = RCC_GetSYSCLK();
+
+		/* Get current HCLK */
+		freq_HCLK = RCC_GetHCLK();
 
 		/* Configure MSI range */
 		RCC->RCC_CR &= ~(0xF << 4);
@@ -71,10 +83,8 @@ void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
 uint32_t RCC_GetSYSCLK(void)
 {
 	uint32_t SYSCLK = 0;		/* Here the System Clock will be stored */
-	uint32_t system_clock;
-	uint32_t msi_range;
-	uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
-									8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+	uint32_t system_clock = 0;
+	uint32_t msi_range = 0;
 
 	/* Read bits SWS from RCC_CFGR */
 	system_clock = ((RCC->RCC_CFGR) & (0xC)) >> (2);
@@ -91,7 +101,7 @@ uint32_t RCC_GetSYSCLK(void)
 			else
 			{
 				/* MSI Range is provided by MSIRANGE[3:0] in the RCC_CR register */
-				msi_range = ((RCC->RCC_CSR) & (0xF0)) >> (4);
+				msi_range = ((RCC->RCC_CR) & (0xF0)) >> (4);
 				SYSCLK = MSIfrequencies[msi_range];
 			}
 			break;

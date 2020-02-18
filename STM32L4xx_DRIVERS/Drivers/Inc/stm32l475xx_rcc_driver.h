@@ -70,6 +70,15 @@ extern "C"
 #define RCC_HSI16_VALUE			((uint32_t)16000000U)
 #define RCC_HSE_VALUE			((uint32_t)8000000U)
 
+#define	RCC_AHBPRESCALER_DIV1		(0)
+#define	RCC_AHBPRESCALER_DIV2		(8)
+#define	RCC_AHBPRESCALER_DIV4		(9)
+#define	RCC_AHBPRESCALER_DIV8		(A)
+#define	RCC_AHBPRESCALER_DIV16		(B)
+#define	RCC_AHBPRESCALER_DIV64		(C)
+#define	RCC_AHBPRESCALER_DIV128		(D)
+#define	RCC_AHBPRESCALER_DIV256		(E)
+#define	RCC_AHBPRESCALER_DIV512		(F)
 
 /******************************************************************************/
   /* TYPEDEFS */
@@ -81,7 +90,7 @@ typedef enum
 }RCC_STATUS;
 
 
-RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue);
+RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint32_t AHB_Prescaler);
 RCC_STATUS RCC_Config_LSI(void);
 RCC_STATUS RCC_Config_HSI(void);
 RCC_STATUS RCC_Config_PLLCLK(void);

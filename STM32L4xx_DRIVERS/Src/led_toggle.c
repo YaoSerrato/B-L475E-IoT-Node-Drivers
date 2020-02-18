@@ -13,8 +13,14 @@
 
 int main()
 {
+	uint32_t freq_SYSCLK = 0;
+	uint32_t freq_HCLK = 0;
+
 	App_RCC_Init();
 	App_GPIO_Init();
+
+	freq_SYSCLK = RCC_GetSYSCLK();
+	freq_HCLK = RCC_GetHCLK();
 
 	while(1)
 	{
@@ -36,16 +42,19 @@ void delay(void)
 
 void App_RCC_Init(void)
 {
+	/* Setting the dynamic voltage range to the range that gets up to 80 MHz (Range 1). */
 	if(PWR_ControlVoltageScaling(PWR_VOLTAGE_RANGE_1) != PWR_STATUS_OK)
 	{
 		Error_Handler();
 	}
 
-	if(RCC_Config_MSI(RCC_MSISPEED_4M, 0x0U) != RCC_STATUS_OK)
+	/* Configuring oscillator */
+	if(RCC_Config_MSI(RCC_MSISPEED_8M, 0x0U, 0) != RCC_STATUS_OK)
 	{
 		Error_Handler();
 	}
 
+	/* Configuring MCO pin */
 	RCC_Config_MCO(RCC_MCOPRE_DIV1, RCC_MCOSEL_MSI);
 }
 
