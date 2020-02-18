@@ -6,27 +6,73 @@
  */
 
 #include <stm32l475xx_rcc_driver.h>
+#include <stm32l475xx_flash_driver.h>
 
 uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
 								8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
 
 RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint32_t AHB_Prescaler)
 {
-	RCC_STATUS status;
-	uint32_t freq_new = 0;
-	uint32_t freq_SYSCLK = 0;
-	uint32_t freq_HCLK = 0;
+	RCC_STATUS status = RCC_STATUS_OK;
+	uint32_t freq_new_HCLK = 0;
+	uint32_t freq_current_SYSCLK = 0;
+	uint32_t freq_current_HCLK = 0;
+
+	/* Determining new desired frequency of HCLK */
+	if(AHB_Prescaler == RCC_AHBPRESCALER_DIV1)
+	{
+		freq_new_HCLK = MSIspeed;
+	}
+	else if((AHB_Prescaler >= RCC_AHBPRESCALER_DIV2) & (AHB_Prescaler <= RCC_AHBPRESCALER_DIV512))
+	{
+		freq_new_HCLK = (MSIspeed) >> (AHB_Prescaler - 0x7);
+	}
+	else
+	{
+		/* An invalid pre scaler was entered */
+		status = RCC_STATUS_ERROR;
+		return status;
+	}
+
+	/* Get current SYSCLK */
+	freq_current_SYSCLK = RCC_GetSYSCLK();
+
+	/* Get current HCLK */
+	freq_current_HCLK = RCC_GetHCLK();
+
+	/* Comparing frequencies */
+	if(freq_current_HCLK != freq_new_HCLK)
+	{
+		/* New HCLK frequency is different from the already set */
+		if(freq_current_HCLK < freq_new_HCLK)
+		{
+			/* Increasing frequency */
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			FLASH_SetLatency(freq_new_HCLK);
+
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+
+			/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+
+			/* Check that the new CPU clock source or/and the new CPU clock prescaler value is/are taken into account by reading the clock source status (SWS bits) */
+
+			/* Now, you can increase the CPU frequency. */
+		}
+		else
+		{
+			/* Decreasing frequency */
+		}
+	}
+	else
+	{
+		/* Frequencies are equal */
+		/* Configure same frequency with new parameters (MSIspeed, MSICalibrationValue, AHB_Prescaler)  */
+	}
 
 	if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
 	{
 		/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
 		 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
-
-		/* Get current SYSCLK */
-		freq_SYSCLK = RCC_GetSYSCLK();
-
-		/* Get current HCLK */
-		freq_HCLK = RCC_GetHCLK();
 
 		/* Configure MSI range */
 		RCC->RCC_CR &= ~(0xF << 4);

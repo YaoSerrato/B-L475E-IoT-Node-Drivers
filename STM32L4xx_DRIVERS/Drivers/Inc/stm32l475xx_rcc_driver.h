@@ -73,12 +73,12 @@ extern "C"
 #define	RCC_AHBPRESCALER_DIV1		(0)
 #define	RCC_AHBPRESCALER_DIV2		(8)
 #define	RCC_AHBPRESCALER_DIV4		(9)
-#define	RCC_AHBPRESCALER_DIV8		(A)
-#define	RCC_AHBPRESCALER_DIV16		(B)
-#define	RCC_AHBPRESCALER_DIV64		(C)
-#define	RCC_AHBPRESCALER_DIV128		(D)
-#define	RCC_AHBPRESCALER_DIV256		(E)
-#define	RCC_AHBPRESCALER_DIV512		(F)
+#define	RCC_AHBPRESCALER_DIV8		(0xA)
+#define	RCC_AHBPRESCALER_DIV16		(0xB)
+#define	RCC_AHBPRESCALER_DIV64		(0xC)
+#define	RCC_AHBPRESCALER_DIV128		(0xD)
+#define	RCC_AHBPRESCALER_DIV256		(0xE)
+#define	RCC_AHBPRESCALER_DIV512		(0xF)
 
 /******************************************************************************/
   /* TYPEDEFS */
