@@ -67,3 +67,71 @@ void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
 	RCC->RCC_CFGR &= ~(0xF << 24);
 	RCC->RCC_CFGR |= (MCOoutput << 24);
 }
+
+uint32_t RCC_GetSYSCLK(void)
+{
+	uint32_t SYSCLK = 0;		/* Here the System Clock will be stored */
+	uint32_t system_clock;
+	uint32_t msi_range;
+	uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
+									8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+
+	/* Read bits SWS from RCC_CFGR */
+	system_clock = ((RCC->RCC_CFGR) & (0xC)) >> (2);
+
+	switch(system_clock)
+	{
+		case RCC_CFGR_SWS_MSI:
+			if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_3) == 0x0)
+			{
+				/* MSI Range is provided by MSISRANGE[3:0] in RCC_CSR register  */
+				msi_range = ((RCC->RCC_CSR) & (0xF00)) >> (8);
+				SYSCLK = MSIfrequencies[msi_range];
+			}
+			else
+			{
+				/* MSI Range is provided by MSIRANGE[3:0] in the RCC_CR register */
+				msi_range = ((RCC->RCC_CSR) & (0xF0)) >> (4);
+				SYSCLK = MSIfrequencies[msi_range];
+			}
+			break;
+
+		case RCC_CFGR_SWS_HSI16:
+			SYSCLK = RCC_HSI16_VALUE;
+			break;
+
+		case RCC_CFGR_SWS_HSE:
+			SYSCLK = RCC_HSE_VALUE;
+			break;
+
+		case RCC_CFGR_SWS_PLL:
+			SYSCLK = 0;
+			break;
+
+		default:
+			SYSCLK = 0;
+	}
+
+	return SYSCLK;
+}
+
+uint32_t RCC_GetHCLK(void)
+{
+	uint32_t SYSCLK = RCC_GetSYSCLK();
+	uint32_t HCLK;
+	uint32_t AHBPRESC;
+
+	AHBPRESC = ((RCC->RCC_CFGR) & (0xF0)) >> (4);
+
+	if((AHBPRESC >= 8) & (AHBPRESC <= 15))
+	{
+		HCLK = (SYSCLK) >> (AHBPRESC - 0x7);
+	}
+	else
+	{
+		HCLK = SYSCLK;
+	}
+
+
+	return HCLK;
+}

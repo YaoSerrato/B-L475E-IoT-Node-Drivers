@@ -9,6 +9,7 @@
 #include <led_toggle.h>
 #include <stm32l475xx_gpio_driver.h>
 #include <stm32l475xx_rcc_driver.h>
+#include <stm32l475xx_pwr_driver.h>
 
 int main()
 {
@@ -35,6 +36,11 @@ void delay(void)
 
 void App_RCC_Init(void)
 {
+	if(PWR_ControlVoltageScaling(PWR_VOLTAGE_RANGE_1) != PWR_STATUS_OK)
+	{
+		Error_Handler();
+	}
+
 	if(RCC_Config_MSI(RCC_MSISPEED_4M, 0x0U) != RCC_STATUS_OK)
 	{
 		Error_Handler();

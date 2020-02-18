@@ -19,17 +19,19 @@ PWR_STATUS PWR_ControlVoltageScaling(uint32_t VoltageScaling)
 			/* Process to change from Range 2 to Range 1 */
 
 			/* Need to set PWR Range 1. Program the VOS bits to “01” in the PWR_CR1 register */
+			PWR->PWR_CR1 &= ~(0x3 << 9);
+			CLR_REG_BIT(PWR->PWR_CR1, REG_BIT_10);
+			SET_REG_BIT(PWR->PWR_CR1, REG_BIT_9);
+
 			/* Wait until the VOSF flag is cleared in the PWR_SR2 register */
-			status = PWR_STATUS_OK;
-		}
-		else if(((PWR->PWR_CR1 & 0x600) >> 9) == PWR_VOLTAGE_RANGE_1)
-		{
-			/* We are already in Range 1 */
+			while(READ_REG_BIT(PWR->PWR_SR2, REG_BIT_10) != 0x1U);
+
 			status = PWR_STATUS_OK;
 		}
 		else
 		{
-			status = PWR_STATUS_ERROR;
+			/* We are already in Range 1 */
+			status = PWR_STATUS_OK;
 		}
 	}
 	else if(VoltageScaling == PWR_VOLTAGE_RANGE_2)
@@ -38,20 +40,21 @@ PWR_STATUS PWR_ControlVoltageScaling(uint32_t VoltageScaling)
 		{
 			/* Means I am coming from Range 1 to Range 2 */
 			/* Set Range 2. Program the VOS bits to “10” in the PWR_CR1 register */
-		}
-		else if(((PWR->PWR_CR1 & 0x600) >> 9) == PWR_VOLTAGE_RANGE_2)
-		{
-			/* We are already in Range 2 */
+			PWR->PWR_CR1 &= ~(0x3 << 9);
+			SET_REG_BIT(PWR->PWR_CR1, REG_BIT_10);
+			CLR_REG_BIT(PWR->PWR_CR1, REG_BIT_9);
+
 			status = PWR_STATUS_OK;
 		}
 		else
 		{
-			status = PWR_STATUS_ERROR;
+			/* We are already in Range 2 */
+			status = PWR_STATUS_OK;
 		}
 	}
 	else
 	{
-		/* A different value from 1 and 2 for VoltageScaling was entered */
+		/* A wrong value for VoltageScaling was entered */
 		status = PWR_STATUS_ERROR;
 	}
 

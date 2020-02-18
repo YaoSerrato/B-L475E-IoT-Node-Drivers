@@ -62,6 +62,15 @@ extern "C"
 #define	RCC_SYSCLK_HSE			(2)
 #define	RCC_SYSCLK_PLL			(3)
 
+#define RCC_CFGR_SWS_MSI		(0)
+#define RCC_CFGR_SWS_HSI16		(1)
+#define RCC_CFGR_SWS_HSE		(2)
+#define RCC_CFGR_SWS_PLL		(3)
+
+#define RCC_HSI16_VALUE			((uint32_t)16000000U)
+#define RCC_HSE_VALUE			((uint32_t)8000000U)
+
+
 /******************************************************************************/
   /* TYPEDEFS */
 /******************************************************************************/
@@ -71,11 +80,15 @@ typedef enum
 	RCC_STATUS_ERROR = 1
 }RCC_STATUS;
 
+
 RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue);
 RCC_STATUS RCC_Config_LSI(void);
 RCC_STATUS RCC_Config_HSI(void);
 RCC_STATUS RCC_Config_PLLCLK(void);
 void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput);
+uint32_t RCC_GetSYSCLK(void);
+uint32_t RCC_GetHCLK(void);
+
 
 #ifdef __cplusplus
 }
