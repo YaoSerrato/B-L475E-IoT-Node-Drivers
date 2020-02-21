@@ -49,14 +49,17 @@ void App_RCC_Init(void)
 	}
 
 	/* Configuring oscillator */
-	if(RCC_Config_MSI(RCC_MSISPEED_1M, 0x0U, RCC_AHBPRESCALER_DIV8) != RCC_STATUS_OK)
+	//if(RCC_Config_MSI(RCC_MSISPEED_8M, 0x0U, RCC_AHBPRESCALER_DIV8) != RCC_STATUS_OK)
+	if(RCC_Config_HSI(RCC_AHBPRESCALER_DIV16) != RCC_STATUS_OK)
+	//if(RCC_Config_LSI(SET) != RCC_STATUS_OK)
 	{
 		Error_Handler();
 	}
 
 	/* Configuring MCO pin */
-	RCC_Config_MCO(RCC_MCOPRE_DIV1, RCC_MCOSEL_MSI);
+	RCC_Config_MCO(RCC_MCOPRE_DIV1, RCC_MCOSEL_SYSCLK);
 }
+
 
 void App_GPIO_Init(void)
 {

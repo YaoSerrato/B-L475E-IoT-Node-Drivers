@@ -91,8 +91,8 @@ typedef enum
 
 
 RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint32_t AHB_Prescaler);
-RCC_STATUS RCC_Config_LSI(void);
-RCC_STATUS RCC_Config_HSI(void);
+RCC_STATUS RCC_Config_LSI(uint32_t LSI_Enabler);
+RCC_STATUS RCC_Config_HSI(uint32_t AHB_Prescaler);
 RCC_STATUS RCC_Config_PLLCLK(void);
 void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput);
 uint32_t RCC_GetSYSCLK(void);

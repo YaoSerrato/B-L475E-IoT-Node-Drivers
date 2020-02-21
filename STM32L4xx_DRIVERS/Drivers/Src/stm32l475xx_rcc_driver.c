@@ -151,7 +151,50 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 	{
 		/* Frequencies are equal */
 		/* Configure same frequency with new parameters (MSIspeed, MSICalibrationValue, AHB_Prescaler)  */
-		/* This one is missing */
+
+		/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+		/* Select MSI as SYSCLK source clock */
+		RCC->RCC_CFGR &= ~(0x3 << 0);
+		RCC->RCC_CFGR |= RCC_SYSCLK_MSI;
+
+		while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_MSI);
+
+		/* Set the AHB Prescaler */
+		RCC->RCC_CFGR &= ~(0xF << 4);
+		RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+
+		while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+
+		/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+		/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+		FLASH_SetLatency(freq_new_HCLK);
+
+		/* Now, you can decrease the CPU frequency. */
+		if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
+		{
+			/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
+			 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
+
+			/* Configure MSI range */
+			RCC->RCC_CR &= ~(0xF << 4);
+			RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
+
+			/* MSI clock range selection */
+			SET_REG_BIT(RCC->RCC_CR, REG_BIT_3);		// MSIRGSEL
+
+			/* Trim/calibrate the MSI oscillator */
+			RCC->RCC_ICSCR &= ~(0xFF << 8);
+			RCC->RCC_ICSCR |= (MSICalibrationValue) << 8;
+
+			/* Enable MSI clock source */
+			SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
+
+			/* Wait for MSI clock signal to stabilize */
+			while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_1) == 0);		// MSIRDY
+
+			status = RCC_STATUS_OK;
+		}
+
 	}
 
 	/* Registers to modify */
@@ -165,6 +208,124 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 		// MSISRANGE
 
 	return status;
+}
+
+RCC_STATUS RCC_Config_HSI(uint32_t AHB_Prescaler)
+{
+	RCC_STATUS status = RCC_STATUS_OK;
+	uint32_t freq_new_HCLK = 0;
+	uint32_t freq_current_SYSCLK = 0;
+	uint32_t freq_current_HCLK = 0;
+
+	/* Determining new desired frequency of HCLK */
+	if(AHB_Prescaler == RCC_AHBPRESCALER_DIV1)
+	{
+		freq_new_HCLK = RCC_HSI16_VALUE;
+	}
+	else if((AHB_Prescaler >= RCC_AHBPRESCALER_DIV2) & (AHB_Prescaler <= RCC_AHBPRESCALER_DIV512))
+	{
+		freq_new_HCLK = RCC_HSI16_VALUE;
+		freq_new_HCLK = (freq_new_HCLK) >> (AHB_Prescaler - 0x7);
+	}
+	else
+	{
+		/* An invalid pre scaler was entered */
+		status = RCC_STATUS_ERROR;
+		return status;
+	}
+
+	/* Get current SYSCLK */
+	freq_current_SYSCLK = RCC_GetSYSCLK();
+
+	/* Get current HCLK */
+	freq_current_HCLK = RCC_GetHCLK();
+
+	/* Comparing frequencies */
+	if(freq_current_HCLK != freq_new_HCLK)
+	{
+		/* New HCLK frequency is different from the already set */
+		if(freq_current_HCLK < freq_new_HCLK)
+		{
+			/* Increasing frequency */
+
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+			FLASH_SetLatency(freq_new_HCLK);
+
+			/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+			/* Select HSI as SYSCLK source clock */
+			RCC->RCC_CFGR &= ~(0x3 << 0);
+			RCC->RCC_CFGR |= RCC_SYSCLK_HSI16;
+			while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_HSI16);
+
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+
+			/* Enable HSI clock source */
+			SET_REG_BIT(RCC->RCC_CR, REG_BIT_8);			// HSION
+
+			/* Wait for HSI clock signal to stabilize */
+			while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_10) == 0);		// HSIRDY
+
+			status = RCC_STATUS_OK;
+
+		}
+		else
+		{
+			/* Decreasing frequency  */
+
+			/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+			/* Select HSI as SYSCLK source clock */
+			RCC->RCC_CFGR &= ~(0x3 << 0);
+			RCC->RCC_CFGR |= RCC_SYSCLK_HSI16;
+			while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_HSI16);
+
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+			FLASH_SetLatency(freq_new_HCLK);
+
+			/* Enable HSI clock source */
+			SET_REG_BIT(RCC->RCC_CR, REG_BIT_8);			// HSION
+
+			/* Wait for HSI clock signal to stabilize */
+			while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_10) == 0);		// HSIRDY
+
+			status = RCC_STATUS_OK;
+		}
+	}
+	else
+	{
+		/* Frequencies are equal */
+	}
+
+	return status;
+}
+
+RCC_STATUS RCC_Config_LSI(uint32_t LSI_Enabler)
+{
+	/* LSI RC can be switched on and off using the LSION (RCC_CSR) */
+	if(LSI_Enabler == SET)
+	{
+		/* Turn on LSI */
+		SET_REG_BIT(RCC->RCC_CSR, REG_BIT_0);
+
+		/* The LSIRDY flag in the Control/status register (RCC_CSR) indicates if the LSI oscillator is ready */
+		while(READ_REG_BIT(RCC->RCC_CSR, REG_BIT_1) == 0);		// HSIRDY
+	}
+	else
+	{
+		/* Turn off LSI */
+		CLR_REG_BIT(RCC->RCC_CSR, REG_BIT_0);
+	}
+
+	return RCC_STATUS_OK;
 }
 
 void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
