@@ -15,6 +15,7 @@ int main()
 {
 	uint32_t freq_SYSCLK = 0;
 	uint32_t freq_HCLK = 0;
+	RCC_STATUS status;
 
 	App_RCC_Init();
 	App_GPIO_Init();
@@ -50,7 +51,8 @@ void App_RCC_Init(void)
 
 	/* Configuring oscillator */
 	//if(RCC_Config_MSI(RCC_MSISPEED_8M, 0x0U, RCC_AHBPRESCALER_DIV8) != RCC_STATUS_OK)
-	if(RCC_Config_HSI(RCC_AHBPRESCALER_DIV16) != RCC_STATUS_OK)
+	//if(RCC_Config_HSI(RCC_AHBPRESCALER_DIV16) != RCC_STATUS_OK)
+	if(RCC_Config_PLLCLK(RCC_PLLSRC_HSI16, RCC_MSISPEED_4M, RCC_PLLM_3, 15, RCC_PLLR_8, RCC_AHBPRESCALER_DIV1) != RCC_STATUS_OK)
 	//if(RCC_Config_LSI(SET) != RCC_STATUS_OK)
 	{
 		Error_Handler();

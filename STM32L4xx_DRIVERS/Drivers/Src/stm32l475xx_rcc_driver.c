@@ -308,6 +308,175 @@ RCC_STATUS RCC_Config_HSI(uint32_t AHB_Prescaler)
 	return status;
 }
 
+RCC_STATUS RCC_Config_PLLCLK(uint32_t ClockSource, uint32_t ClockSourceFrequency, uint32_t PLLM, uint32_t PLLN, uint32_t PLLR, uint32_t AHB_Prescaler)
+{
+	RCC_STATUS status = RCC_STATUS_OK;
+	uint32_t freq_new_HCLK = 0;
+	uint32_t freq_current_SYSCLK = 0;
+	uint32_t freq_current_HCLK = 0;
+	uint32_t PLL_M, PLL_N, PLL_R;
+
+	/* Determining new desired frequency of HCLK */
+
+	PLL_M = PLLM + 1U;
+	PLL_N = PLLN;
+	PLL_R = (PLLR + 1U)*(2U);
+
+	switch(ClockSource)
+	{
+		case RCC_PLLSRC_NOCLK:
+			status = RCC_STATUS_ERROR;
+			return status;
+		case RCC_PLLSRC_MSI:
+			freq_new_HCLK = MSIfrequencies[ClockSourceFrequency];
+			break;
+		case RCC_PLLSRC_HSI16:
+			freq_new_HCLK = RCC_HSI16_VALUE;
+			break;
+		case RCC_PLLSRC_HSE:
+			freq_new_HCLK = RCC_HSE_VALUE;
+			break;
+		default:
+			status = RCC_STATUS_ERROR;
+			return status;
+	}
+
+	freq_new_HCLK = (freq_new_HCLK*PLL_N)/(PLL_M*PLL_R);
+
+	if((AHB_Prescaler >= RCC_AHBPRESCALER_DIV2) & (AHB_Prescaler <= RCC_AHBPRESCALER_DIV512))
+	{
+		freq_new_HCLK = (freq_new_HCLK) >> (AHB_Prescaler - 0x7);
+	}
+
+	/* Get current SYSCLK */
+	freq_current_SYSCLK = RCC_GetSYSCLK();
+
+	/* Get current HCLK */
+	freq_current_HCLK = RCC_GetHCLK();
+
+	/* Comparing frequencies */
+	if(freq_current_HCLK != freq_new_HCLK)
+	{
+		/* New HCLK frequency is different from the already set */
+		if(freq_current_HCLK < freq_new_HCLK)
+		{
+			/* Increasing frequency */
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+			FLASH_SetLatency(freq_new_HCLK);
+
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+		}
+		else
+		{
+			/* Decreasing frequency  */
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+			FLASH_SetLatency(freq_new_HCLK);
+		}
+	}
+	else
+	{
+		/* Frequencies are equal */
+		/* Configure same frequency with new parameters  */
+	}
+
+	/* Configure MSI, HSI16 or HSE first. Turn them on. */
+	switch(ClockSource)
+	{
+		case RCC_PLLSRC_NOCLK:
+			status = RCC_STATUS_ERROR;
+			return status;
+
+		case RCC_PLLSRC_MSI:
+			/* Configuring MSI */
+
+			if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
+			{
+				/* Configure MSI range */
+				RCC->RCC_CR &= ~(0xF << 4);
+				RCC->RCC_CR	|= (ClockSourceFrequency << 4);		// MSIRANGE
+
+				/* MSI clock range selection */
+				SET_REG_BIT(RCC->RCC_CR, REG_BIT_3);		// MSIRGSEL
+
+				/* Enable MSI clock source */
+				SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
+
+				/* Wait for MSI clock signal to stabilize */
+				while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_1) == 0);		// MSIRDY
+
+			}
+			else
+			{
+				status = RCC_STATUS_ERROR;
+				return status;
+			}
+			break;
+
+		case RCC_PLLSRC_HSI16:
+			/* Configuring HSI */
+
+			/* Enable HSI clock source */
+			SET_REG_BIT(RCC->RCC_CR, REG_BIT_8);			// HSION
+
+			/* Wait for HSI clock signal to stabilize */
+			while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_10) == 0);		// HSIRDY
+
+			break;
+
+		case RCC_PLLSRC_HSE:
+			status = RCC_STATUS_ERROR;
+			return status;
+
+		default:
+			status = RCC_STATUS_ERROR;
+			return status;
+	}
+
+	/* Disable the PLL by setting PLLON to 0 in Clock control register (RCC_CR). */
+	CLR_REG_BIT(RCC->RCC_CR, REG_BIT_24);
+
+	/* Wait until PLLRDY is cleared. The PLL is now fully stopped. */
+	while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_25) == 1);
+
+	/* Change the input clock source (MSI, HSI16, HSE). */
+	RCC->RCC_PLLCFGR &= ~(0x3 << 0U);
+	RCC->RCC_PLLCFGR |= (ClockSource << 0U);
+
+	/* Change this parameters: PLLM, PLLN, PLLR. */
+	RCC->RCC_PLLCFGR &= ~(0x7 << 4U);
+	RCC->RCC_PLLCFGR |= (PLLM << 4U);
+
+	RCC->RCC_PLLCFGR &= ~(0x7F << 8U);
+	RCC->RCC_PLLCFGR |= (PLLN << 8U);
+
+	RCC->RCC_PLLCFGR &= ~(0x3 << 25U);
+	RCC->RCC_PLLCFGR |= (PLLR << 25U);
+
+	/* Enable the PLL again by setting PLLON to 1. */
+	SET_REG_BIT(RCC->RCC_CR, REG_BIT_24);
+
+	/* Enable the desired PLL outputs by configuring PLLPEN, PLLQEN, PLLREN in RCC_PLLCFGR. */
+	SET_REG_BIT(RCC->RCC_PLLCFGR, REG_BIT_24);
+
+	/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+	/* Select PLL as SYSCLK source clock */
+	RCC->RCC_CFGR &= ~(0x3 << 0);
+	RCC->RCC_CFGR |= RCC_SYSCLK_PLL;
+	while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_PLL);
+
+	return status;
+}
+
 RCC_STATUS RCC_Config_LSI(uint32_t LSI_Enabler)
 {
 	/* LSI RC can be switched on and off using the LSION (RCC_CSR) */
@@ -341,9 +510,12 @@ void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
 
 uint32_t RCC_GetSYSCLK(void)
 {
-	uint32_t SYSCLK = 0;		/* Here the System Clock will be stored */
+	uint32_t SYSCLK = 0;			/* Here the System Clock will be stored */
 	uint32_t system_clock = 0;
+	uint32_t pll_clocksrc = 0;
 	uint32_t msi_range = 0;
+	uint32_t pll_clkin = 0;
+	uint32_t PLLM = 1, PLLN = 0, PLLR = 1;
 
 	/* Read bits SWS from RCC_CFGR */
 	system_clock = ((RCC->RCC_CFGR) & (0xC)) >> (2);
@@ -374,7 +546,49 @@ uint32_t RCC_GetSYSCLK(void)
 			break;
 
 		case RCC_CFGR_SWS_PLL:
-			SYSCLK = 0;
+
+			/* Read bits PLLSRC from RCC_PLLCFGR */
+			pll_clocksrc = (RCC->RCC_PLLCFGR) & (0x3);
+
+			/* Determining PLL clock source value */
+			switch(pll_clocksrc)
+			{
+				case RCC_PLLSRC_NOCLK:
+					pll_clkin = 0;
+					break;
+				case RCC_PLLSRC_MSI:
+					if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_3) == 0x0)
+					{
+						/* MSI Range is provided by MSISRANGE[3:0] in RCC_CSR register  */
+						msi_range = ((RCC->RCC_CSR) & (0xF00)) >> (8);
+						pll_clkin = MSIfrequencies[msi_range];
+					}
+					else
+					{
+						/* MSI Range is provided by MSIRANGE[3:0] in the RCC_CR register */
+						msi_range = ((RCC->RCC_CR) & (0xF0)) >> (4);
+						pll_clkin = MSIfrequencies[msi_range];
+					}
+					break;
+				case RCC_PLLSRC_HSI16:
+					pll_clkin = RCC_HSI16_VALUE;
+					break;
+				case RCC_PLLSRC_HSE:
+					pll_clkin = RCC_HSE_VALUE;
+					break;
+				default:
+					pll_clkin = 0;
+					break;
+			}
+
+			/* Determining values for PLLM, PLLN and PLLR */
+			PLLM = (((RCC->RCC_PLLCFGR) & (0x70U)) >> 4U) + 1U;
+			PLLN = ((RCC->RCC_PLLCFGR) & (0x7F00U)) >> 8U;
+			PLLR = ((((RCC->RCC_PLLCFGR) & (0x6000000U)) >> 25U) + 1U)*(2U);
+
+			/* Determining system clock */
+			SYSCLK = (pll_clkin*PLLN)/(PLLM*PLLR);
+
 			break;
 
 		default:
@@ -403,4 +617,54 @@ uint32_t RCC_GetHCLK(void)
 
 
 	return HCLK;
+}
+
+uint32_t RCC_GetMSIfreq(uint32_t RCC_MSISPEED)
+{
+	uint32_t freq = 0;
+
+	switch(RCC_MSISPEED)
+	{
+		case RCC_MSISPEED_100K:
+			freq = (uint32_t)100000;
+			break;
+		case RCC_MSISPEED_200K:
+			freq = (uint32_t)200000;
+			break;
+		case RCC_MSISPEED_400K:
+			freq = (uint32_t)400000;
+			break;
+		case RCC_MSISPEED_800K:
+			freq = (uint32_t)800000;
+			break;
+		case RCC_MSISPEED_1M:
+			freq = (uint32_t)1000000;
+			break;
+		case RCC_MSISPEED_2M:
+			freq = (uint32_t)2000000;
+			break;
+		case RCC_MSISPEED_4M:
+			freq = (uint32_t)4000000;
+			break;
+		case RCC_MSISPEED_8M:
+			freq = (uint32_t)8000000;
+			break;
+		case RCC_MSISPEED_16M:
+			freq = (uint32_t)16000000;
+			break;
+		case RCC_MSISPEED_24M:
+			freq = (uint32_t)24000000;
+			break;
+		case RCC_MSISPEED_32M:
+			freq = (uint32_t)32000000;
+			break;
+		case RCC_MSISPEED_48M:
+			freq = (uint32_t)48000000;
+			break;
+		default:
+			freq = (uint32_t)0;
+			break;
+	}
+
+	return freq;
 }
