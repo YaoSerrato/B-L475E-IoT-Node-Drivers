@@ -21,11 +21,12 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 	/* Determining new desired frequency of HCLK */
 	if(AHB_Prescaler == RCC_AHBPRESCALER_DIV1)
 	{
-		freq_new_HCLK = MSIspeed;
+		freq_new_HCLK = MSIfrequencies[MSIspeed];
 	}
 	else if((AHB_Prescaler >= RCC_AHBPRESCALER_DIV2) & (AHB_Prescaler <= RCC_AHBPRESCALER_DIV512))
 	{
-		freq_new_HCLK = (MSIspeed) >> (AHB_Prescaler - 0x7);
+		freq_new_HCLK = MSIfrequencies[MSIspeed];
+		freq_new_HCLK = (freq_new_HCLK) >> (AHB_Prescaler - 0x7);
 	}
 	else
 	{
@@ -48,58 +49,109 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 		{
 			/* Increasing frequency */
 			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
 			FLASH_SetLatency(freq_new_HCLK);
 
-			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
-
 			/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+			/* Select MSI as SYSCLK source clock */
+			RCC->RCC_CFGR &= ~(0x3 << 0);
+			RCC->RCC_CFGR |= RCC_SYSCLK_MSI;
 
-			/* Check that the new CPU clock source or/and the new CPU clock prescaler value is/are taken into account by reading the clock source status (SWS bits) */
+			while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_MSI);
+
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
 
 			/* Now, you can increase the CPU frequency. */
+			if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
+			{
+				/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
+				 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
+
+				/* Configure MSI range */
+				RCC->RCC_CR &= ~(0xF << 4);
+				RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
+
+				/* MSI clock range selection */
+				SET_REG_BIT(RCC->RCC_CR, REG_BIT_3);		// MSIRGSEL
+
+				/* Trim/calibrate the MSI oscillator */
+				RCC->RCC_ICSCR &= ~(0xFF << 8);
+				RCC->RCC_ICSCR |= (MSICalibrationValue) << 8;
+
+				/* Enable MSI clock source */
+				SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
+
+				/* Wait for MSI clock signal to stabilize */
+				while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_1) == 0);		// MSIRDY
+
+				status = RCC_STATUS_OK;
+			}
+			else
+			{
+				status = RCC_STATUS_ERROR;
+			}
+
 		}
 		else
 		{
-			/* Decreasing frequency */
+			/* Decreasing frequency  */
+			/* Modify the CPU clock source by writing the SW bits in the RCC_CFGR register */
+			/* Select MSI as SYSCLK source clock */
+			RCC->RCC_CFGR &= ~(0x3 << 0);
+			RCC->RCC_CFGR |= RCC_SYSCLK_MSI;
+
+			while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_MSI);
+
+			/* Set the AHB Prescaler */
+			RCC->RCC_CFGR &= ~(0xF << 4);
+			RCC->RCC_CFGR |= (AHB_Prescaler << 4);
+
+			while(((RCC->RCC_CFGR)&(0xF << 4)) != (AHB_Prescaler << 4));
+
+			/* Program the wait states according to Dynamic Voltage Range selected and the new frequency */
+			/* Check if this new setting is being taken into account by reading the LATENCY bits in the FLASH_ACR register */
+			FLASH_SetLatency(freq_new_HCLK);
+
+			/* Now, you can decrease the CPU frequency. */
+			if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
+			{
+				/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
+				 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
+
+				/* Configure MSI range */
+				RCC->RCC_CR &= ~(0xF << 4);
+				RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
+
+				/* MSI clock range selection */
+				SET_REG_BIT(RCC->RCC_CR, REG_BIT_3);		// MSIRGSEL
+
+				/* Trim/calibrate the MSI oscillator */
+				RCC->RCC_ICSCR &= ~(0xFF << 8);
+				RCC->RCC_ICSCR |= (MSICalibrationValue) << 8;
+
+				/* Enable MSI clock source */
+				SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
+
+				/* Wait for MSI clock signal to stabilize */
+				while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_1) == 0);		// MSIRDY
+
+				status = RCC_STATUS_OK;
+			}
+			else
+			{
+				status = RCC_STATUS_ERROR;
+			}
 		}
 	}
 	else
 	{
 		/* Frequencies are equal */
 		/* Configure same frequency with new parameters (MSIspeed, MSICalibrationValue, AHB_Prescaler)  */
-	}
-
-	if(READ_REG_BIT(RCC->RCC_CR, REG_BIT_0) == 0 || READ_REG_BIT(RCC->RCC_CR, REG_BIT_1))
-	{
-		/* MSIRANGE can be modified when MSI is OFF (MSION=0) or when MSI is ready (MSIRDY=1).
-		 * MSIRANGE must NOT be modified when MSI is ON and NOT ready (MSION=1 and MSIRDY=0) */
-
-		/* Configure MSI range */
-		RCC->RCC_CR &= ~(0xF << 4);
-		RCC->RCC_CR	|= (MSIspeed << 4);		// MSIRANGE
-
-		/* MSI clock range selection */
-		SET_REG_BIT(RCC->RCC_CR, REG_BIT_3);		// MSIRGSEL
-
-		/* Trim/calibrate the MSI oscillator */
-		RCC->RCC_ICSCR &= ~(0xFF << 8);
-		RCC->RCC_ICSCR |= (MSICalibrationValue) << 8;
-
-		/* Select MSI as SYSCLK source clock */
-		RCC->RCC_CFGR &= ~(0x3 << 0);
-		RCC->RCC_CFGR |= RCC_SYSCLK_MSI;
-
-		/* Enable MSI clock source */
-		SET_REG_BIT(RCC->RCC_CR, 0);			// MSION
-
-		/* Wait for MSI clock signal to stabilize */
-		while(READ_REG_BIT(RCC->RCC_CR, REG_BIT_1) == 0);		// MSIRDY
-
-		status = RCC_STATUS_OK;
-	}
-	else
-	{
-		status = RCC_STATUS_ERROR;
+		/* This one is missing */
 	}
 
 	/* Registers to modify */
