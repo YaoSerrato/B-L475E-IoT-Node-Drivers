@@ -49,7 +49,7 @@ void App_RCC_Init(void)
 	}
 
 	/* Configuring oscillator */
-	if(RCC_Config_MSI(RCC_MSISPEED_8M, 0x0U, 0) != RCC_STATUS_OK)
+	if(RCC_Config_MSI(RCC_MSISPEED_1M, 0x0U, RCC_AHBPRESCALER_DIV8) != RCC_STATUS_OK)
 	{
 		Error_Handler();
 	}
