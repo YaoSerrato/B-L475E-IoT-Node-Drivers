@@ -21,6 +21,18 @@
 #define	GPIO_PIN_SET				SET
 #define	GPIO_PIN_RESET				RESET
 
+#define NVIC_ISER0                      (__vo uint32_t*)0xE000E100
+#define NVIC_ISER1                      (__vo uint32_t*)0xE000E104
+#define NVIC_ISER2                      (__vo uint32_t*)0xE000E108
+
+#define NVIC_ICER0                      (__vo uint32_t*)0xE000E180
+#define NVIC_ICER1                      (__vo uint32_t*)0xE000E184
+#define NVIC_ICER2                      (__vo uint32_t*)0xE000E188
+
+#define NVIC_PRIORITY_BASE_ADDRESS      (__vo uint32_t*)0xE000E400
+
+#define NO_PR_BITS_IMPLEMENTED          (4)
+
 #define READ_REG_BIT(REG, N)		((((unsigned) REG) >> (N)) & (1U))
 #define SET_REG_BIT(REG, N)			(REG |=  (1U << N))
 #define CLR_REG_BIT(REG, N) 		(REG &= ~(1U << N))
@@ -93,6 +105,7 @@
 
 /* Base addresses of APB2 Peripherals */
 #define	SYSCFG_BASE_ADDRESS			(APB2PERIPH_BASE_ADDRESS + 0x0000U)
+#define EXTI_BASE_ADDRESS           (APB2PERIPH_BASE_ADDRESS + 0x400U)
 
 /* Base addresses of APB1 Peripherals */
 #define	PWR_BASE_ADDRESS			(APB1PERIPH_BASE_ADDRESS + 0x7000U)
@@ -232,6 +245,51 @@ typedef struct
 
 #define	PWR							((PWR_RegDef_t*) PWR_BASE_ADDRESS)
 
+typedef struct  /**< Peripheral register definition structure for EXTI */
+{
+  __vo uint32_t EXTI_IMR1;              /* Address offset: 0x00 */
+  __vo uint32_t EXTI_EMR1;              /* Address offset: 0x04 */
+  __vo uint32_t EXTI_RTSR1;             /* Address offset: 0x08 */
+  __vo uint32_t EXTI_FTSR1;             /* Address offset: 0x0C */
+  __vo uint32_t EXTI_SWIER1;            /* Address offset: 0x10 */
+  __vo uint32_t EXTI_PR1;               /* Address offset: 0x14 */
+  uint32_t      RESERVED1;              /* Address offset: 0x18 */
+  uint32_t      RESERVED2;              /* Address offset: 0x1C */
+  __vo uint32_t EXTI_IMR2;              /* Address offset: 0x20 */
+  __vo uint32_t EXTI_EMR2;              /* Address offset: 0x24 */
+  __vo uint32_t EXTI_RTSR2;             /* Address offset: 0x28 */
+  __vo uint32_t EXTI_FTSR2;             /* Address offset: 0x2C */
+  __vo uint32_t EXTI_SWIER2;            /* Address offset: 0x30 */
+  __vo uint32_t EXTI_PR2;               /* Address offset: 0x34 */
+}EXTI_RegDef_t;
+
+/** @name EXTI registers base address.
+ */
+///@{
+#define	EXTI							((EXTI_RegDef_t*) EXTI_BASE_ADDRESS)
+///@}
+
+typedef struct  /**< Peripheral register definition structure for SYSCFG */
+{
+  __vo uint32_t SYSCFG_MEMRMP;          /* Address offset: 0x00 */
+  __vo uint32_t SYSCFG_CFGR1;           /* Address offset: 0x04 */
+  __vo uint32_t SYSCFG_EXTICR1;         /* Address offset: 0x08 */
+  __vo uint32_t SYSCFG_EXTICR2;         /* Address offset: 0x0C */
+  __vo uint32_t SYSCFG_EXTICR3;         /* Address offset: 0x10 */
+  __vo uint32_t SYSCFG_EXTICR4;         /* Address offset: 0x14 */
+  __vo uint32_t SYSCFG_SCSR;            /* Address offset: 0x18 */
+  __vo uint32_t SYSCFG_CFGR2;           /* Address offset: 0x1C */
+  __vo uint32_t SYSCFG_SWPR;            /* Address offset: 0x20 */
+  __vo uint32_t SYSCFG_SKR;             /* Address offset: 0x24 */
+  __vo uint32_t SYSCFG_SWPR2;           /* Address offset: 0x28 */
+}SYSCFG_RegDef_t;
+
+/** @name SYSCFG registers base address.
+ */
+///@{
+#define	SYSCFG							((SYSCFG_RegDef_t*) SYSCFG_BASE_ADDRESS)
+///@}
+
 /* ------------------------------------------------------------------------------------------------------------------------- */
 /* Clock enable macros for GPIOx peripherals */
 #define	GPIOA_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 0))
@@ -259,6 +317,14 @@ typedef struct
 /* Clock disable macro for PWR peripheral */
 #define	PWR_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << 28))
 
+/** @name Clock enable/disable macros for PWR peripheral.
+ */
+///@{
+#define SYSCFG_PCLK_EN()                        (RCC->RCC_APB2ENR |= (1 << 0))
+
+#define SYSCFG_PCLK_DI()                        (RCC->RCC_APB2ENR &= ~(1 << 0))
+///@}
+
 /* GPIO registers reset macro */
 #define GPIOA_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 0)); (RCC->RCC_AHB2RSTR &= ~(1 << 0)); }while(0)
 #define GPIOB_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 1)); (RCC->RCC_AHB2RSTR &= ~(1 << 1)); }while(0)
@@ -269,5 +335,17 @@ typedef struct
 #define GPIOG_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 6)); (RCC->RCC_AHB2RSTR &= ~(1 << 6)); }while(0)
 #define GPIOH_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 7)); (RCC->RCC_AHB2RSTR &= ~(1 << 7)); }while(0)
 
+/** @name Macro that converts GPIO Base Address to a binary number from 0 to 15.
+ */
+///@{
+#define GPIO_BASEADDRESS_TO_CODE(x)             ((x == GPIOA) ? 0:\
+                                                 (x == GPIOB) ? 1:\
+                                                 (x == GPIOC) ? 2:\
+                                                 (x == GPIOD) ? 3:\
+                                                 (x == GPIOE) ? 4:\
+                                                 (x == GPIOF) ? 5:\
+                                                 (x == GPIOG) ? 6:\
+                                                 (x == GPIOH) ? 7:0)
+///@}
 
 #endif /* INC_STM32L475XX_H_ */
