@@ -1,16 +1,82 @@
-/*
- * stm32l475xx_rcc_driver.c
+/**************************************************************************//**
+ * @file    stm32l475xx_rcc_driver.c
+ * @brief   This file contains the function definitions for the RCC driver
+ *          for the STM32L475VG microcontroller.
  *
- *  Created on: Feb 13, 2020
- *      Author: H369169
- */
+ * This file has 8 functions definitions (input parameters omitted):
+ *      <br>1) RCC_Config_MSI()         - Configures MSI as system clock. </br>
+ *      <br>2) RCC_Config_HSI()         - Configures HSI as system clock. </br>
+ *      <br>3) RCC_Config_PLLCLK()      - Configures PLL as system clock. </br>
+ *      <br>4) RCC_Config_LSI()         - Configures LSI. </br>
+ *      <br>5) RCC_Config_MCO()         - Configures MCO pin. </br>
+ *      <br>6) RCC_GetSYSCLK()          - Gets system clock value. </br>
+ *      <br>7) RCC_GetHCLK()            - Gets HCLK clock value. </br>
+ *      <br>8) RCC_GetMSIfreq()         - Gets the MSI range. </br>
+ *
+ * @version 1.0.0.0
+ *
+ * @author  Yaoctzin Serrato
+ *
+ * @date    24/February/2019
+ ******************************************************************************
+ * @section License
+ * <b> COPYRIGHT (C) 2019 BY: Honeywell International. </b>
+ ******************************************************************************
+ *
+ *
+ *****************************************************************************/
 
+/*****************************************************************************/
+  /* INCLUDES */
+/*****************************************************************************/
+/* Here go the system header files */
+
+/* Here go the project includes */
+
+/* Here go the own includes */
 #include <stm32l475xx_rcc_driver.h>
 #include <stm32l475xx_flash_driver.h>
 
-uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
-								8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+/*****************************************************************************/
+  /* DEFINES */
+/*****************************************************************************/
 
+/*****************************************************************************/
+  /* TYPEDEFS */
+/*****************************************************************************/
+
+/*****************************************************************************/
+  /* CONSTANTS */
+/*****************************************************************************/
+
+/*****************************************************************************/
+  /* PUBLIC VARIABLES */
+/*****************************************************************************/
+uint32_t MSIfrequencies[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, 4000000U, \
+                              8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+
+/*****************************************************************************/
+  /* STATIC VARIABLES */
+/*****************************************************************************/
+
+/*****************************************************************************/
+  /* DEPENDENCIES */
+/*****************************************************************************/
+
+/*****************************************************************************/
+  /* FUNCTION DEFINITIONS */
+/*****************************************************************************/
+
+/**************************************************************************//**
+* @brief       This function configures the MSI oscillator range.
+*              The function sets the MSI as system clock and configures the HCLK.
+*
+* @param       MSIspeed                 MSI range from the 12 options.
+* @param       MSICalibrationValue      Calibration value for MSI.
+* @param       AHB_Prescaler            AHB prescaler for HCLK.
+*
+* @return      RCC_STATUS_OK or RCC_STATUS_ERROR
+******************************************************************************/
 RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint32_t AHB_Prescaler)
 {
 	RCC_STATUS status = RCC_STATUS_OK;
@@ -57,7 +123,7 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 			RCC->RCC_CFGR &= ~(0x3 << 0);
 			RCC->RCC_CFGR |= RCC_SYSCLK_MSI;
 
-			while(((RCC->RCC_CFGR)&(0xC) >> 2) != RCC_SYSCLK_MSI);
+			while(((RCC->RCC_CFGR)&(0xC) >> (2)) != RCC_SYSCLK_MSI);
 
 			/* Set the AHB Prescaler */
 			RCC->RCC_CFGR &= ~(0xF << 4);
@@ -210,6 +276,13 @@ RCC_STATUS RCC_Config_MSI(uint32_t MSIspeed, uint32_t MSICalibrationValue, uint3
 	return status;
 }
 
+/**************************************************************************//**
+* @brief       The function sets the HSI as system clock and configures the HCLK.
+*
+* @param       AHB_Prescaler            AHB prescaler for HCLK.
+*
+* @return      RCC_STATUS_OK or RCC_STATUS_ERROR
+******************************************************************************/
 RCC_STATUS RCC_Config_HSI(uint32_t AHB_Prescaler)
 {
 	RCC_STATUS status = RCC_STATUS_OK;
@@ -308,6 +381,18 @@ RCC_STATUS RCC_Config_HSI(uint32_t AHB_Prescaler)
 	return status;
 }
 
+/**************************************************************************//**
+* @brief       The function sets the PLL as system clock and configures the HCLK.
+*
+* @param       ClockSource              Clock source for the PLL (HSE, HSI or MSI).
+* @param       ClockSourceFrequency     Clock source frequency.
+* @param       PLLM                     PLLM prescaler.
+* @param       PLLN                     PLLN prescaler.
+* @param       PLLR                     PLLR prescaler.
+* @param       AHB_Prescaler            AHB prescaler for HCLK.
+*
+* @return      RCC_STATUS_OK or RCC_STATUS_ERROR
+******************************************************************************/
 RCC_STATUS RCC_Config_PLLCLK(uint32_t ClockSource, uint32_t ClockSourceFrequency, uint32_t PLLM, uint32_t PLLN, uint32_t PLLR, uint32_t AHB_Prescaler)
 {
 	RCC_STATUS status = RCC_STATUS_OK;
@@ -477,6 +562,13 @@ RCC_STATUS RCC_Config_PLLCLK(uint32_t ClockSource, uint32_t ClockSourceFrequency
 	return status;
 }
 
+/**************************************************************************//**
+* @brief       The function enables/disables the LSI.
+*
+* @param       LSI_Enabler              Used for enable/disable the LSI.
+*
+* @return      RCC_STATUS_OK or RCC_STATUS_ERROR
+******************************************************************************/
 RCC_STATUS RCC_Config_LSI(uint32_t LSI_Enabler)
 {
 	/* LSI RC can be switched on and off using the LSION (RCC_CSR) */
@@ -497,6 +589,14 @@ RCC_STATUS RCC_Config_LSI(uint32_t LSI_Enabler)
 	return RCC_STATUS_OK;
 }
 
+/**************************************************************************//**
+* @brief       The function configures the MCO for measuring the SYSCLK.
+*
+* @param       MCOprescaler             Prescaler for the MCO signal.
+* @param       MCOoutput                MCO output selection.
+*
+* @return      RCC_STATUS_OK or RCC_STATUS_ERROR
+******************************************************************************/
 void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
 {
 	/* MCO clock pre-scaler */
@@ -508,6 +608,11 @@ void RCC_Config_MCO(uint8_t MCOprescaler, uint8_t MCOoutput)
 	RCC->RCC_CFGR |= (MCOoutput << 24);
 }
 
+/**************************************************************************//**
+* @brief       The function calculates the SYSCLK.
+*
+* @return      SYSCLK frequency.
+******************************************************************************/
 uint32_t RCC_GetSYSCLK(void)
 {
 	uint32_t SYSCLK = 0;			/* Here the System Clock will be stored */
@@ -598,6 +703,11 @@ uint32_t RCC_GetSYSCLK(void)
 	return SYSCLK;
 }
 
+/**************************************************************************//**
+* @brief       The function calculates the HCLK.
+*
+* @return      HCLK frequency.
+******************************************************************************/
 uint32_t RCC_GetHCLK(void)
 {
 	uint32_t SYSCLK = RCC_GetSYSCLK();
