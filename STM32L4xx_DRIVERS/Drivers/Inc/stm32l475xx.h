@@ -70,6 +70,18 @@
 #define	REG_BIT_30					(30U)
 #define	REG_BIT_31					(31U)
 
+/** @name IRQ numbers for STM32L475VG.
+ */
+///@{
+#define IRQ_NO_EXTI0                    (6)
+#define IRQ_NO_EXTI1                    (7)
+#define IRQ_NO_EXTI2                    (8)
+#define IRQ_NO_EXTI3                    (9)
+#define IRQ_NO_EXTI4                    (10)
+#define IRQ_NO_EXTI9_5                  (23)
+#define IRQ_NO_EXTI15_10                (40)
+///@}
+
 /* Base addresses for Flash and SRAM memories */
 #define	FLASH_BASE_ADDRESS			(0x08000000U)
 #define SRAM1_BASE_ADDRESS			(0x20000000U)
