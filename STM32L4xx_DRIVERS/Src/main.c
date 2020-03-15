@@ -151,7 +151,7 @@ void App_GPIO_Init(void)
   /* Configuring button */
   GPIO_BUTTON.pGPIOx = GPIOC;
   GPIO_BUTTON.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
-  GPIO_BUTTON.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ITRE;
+  GPIO_BUTTON.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ITFE;
   GPIO_BUTTON.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_HIGH;
   GPIO_BUTTON.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
   GPIO_BUTTON.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
