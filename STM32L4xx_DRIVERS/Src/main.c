@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file    main.c
  * @brief   This is the first version of the RCC module for STM32L475VG
- *          microcontroller. A
+ *          microcontroller.
  *
  * This file has two configuration functions:
  *      <br>1)  App_GPIO_Init()     - configures the GPIO pins.</br>
@@ -14,7 +14,6 @@
  * @date    24/February/2019
  ******************************************************************************
  * @section License
- * <b> COPYRIGHT (C) 2019 BY: Honeywell International. </b>
  ******************************************************************************
  *
  *
