@@ -184,3 +184,4 @@ void EXTI15_10_IRQHandler(void)
 /* Initial commit on develop */
 /* Another change in feature_test branch */
 /* More commits on develop */
+/* This is for hotfix_test */
