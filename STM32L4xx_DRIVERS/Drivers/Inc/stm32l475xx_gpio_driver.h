@@ -173,5 +173,3 @@ void GPIO_IRQHandling(uint8_t PinNumber);
 #endif
 
 #endif /* INC_STM32L475XX_GPIO_DRIVER_H_ */
-/* Third commit on develop */
-/* First commit on feature_test branch */

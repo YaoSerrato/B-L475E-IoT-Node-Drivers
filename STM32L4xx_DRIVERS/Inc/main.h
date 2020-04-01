@@ -60,6 +60,3 @@ void EXTI0_IRQHandler(void);
 #endif
 
 #endif /* LED_TOGGLE_H_ */
-/* Second commit on develop */
-/* More commits on develop */
-/* This is for preparing the release */

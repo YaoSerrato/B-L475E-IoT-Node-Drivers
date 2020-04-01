@@ -180,8 +180,3 @@ void EXTI15_10_IRQHandler(void)
   /* Clear the EXTI Pending Register */
   GPIO_IRQHandling(GPIO_PIN_13);
 }
-
-/* Initial commit on develop */
-/* Another change in feature_test branch */
-/* More commits on develop */
-/* This is for hotfix_test */
