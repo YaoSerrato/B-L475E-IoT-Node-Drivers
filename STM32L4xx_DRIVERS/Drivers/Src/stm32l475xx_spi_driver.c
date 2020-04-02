@@ -3,17 +3,14 @@
  * @brief   This file contains the function definitions for the SPI driver
  *          for the STM32L475VG microcontroller.
  *
- * This file has 10 functions definitions (input parameters omitted):
- *      <br>1) GPIO_PeriphClkControl()  - Enables the GPIO peripheral clock. </br>
- *      <br>2) GPIO_Init()              - Initializes a GPIO pin with the given configuration. </br>
- *      <br>3) GPIO_DeInit()            - Returns every GPIO register to its default value. </br>
- *      <br>4) GPIO_ReadPin()           - Reads the state of a GPIO pin. </br>
- *      <br>5) GPIO_ReadPort()          - Reads the state of a GPIO port. </br>
- *      <br>6) GPIO_WritePin()          - Writes the state of a GPIO pin. </br>
- *      <br>7) GPIO_WritePort()         - Writes the state of a GPIO port. </br>
- *      <br>8) GPIO_TogglePin()         - Toggles the state of a GPIO pin. </br>
- *      <br>9) GPIO_IRQConfig()         - Not implemented yet. </br>
- *      <br>10) GPIO_IRQHandling()      - Not implemented yet. </br>
+ * This file has 7 functions definitions (input parameters omitted):
+ *      <br>1) SPI_PeriphClkControl()  - Enables the SPI peripheral clock. </br>
+ *      <br>2) SPI_Init()              - Initializes a SPI peripheral with the given configuration. </br>
+ *      <br>3) SPI_DeInit()            - Deinitializes a SPI peripheral. </br>
+ *      <br>4) SPI_Transmit()          - Send date through SPI bus. </br>
+ *      <br>5) SPI_Receive()           - Receive data over the SPI bus. </br>
+ *      <br>6) SPI_IRQConfig()         - Configures the SPI interrupts. </br>
+ *      <br>7) SPI_IRQHandling()       - Handles the SPI interrupt. </br>
  *
  * @version 1.0.0.0
  *
