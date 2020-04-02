@@ -16,7 +16,7 @@
  *
  * @author  Yaoctzin Serrato
  *
- * @date    24/February/2019
+ * @date    24/February/2020
  ******************************************************************************
  * @section License
  ******************************************************************************
@@ -188,4 +188,3 @@ uint32_t RCC_GetMSIfreq(uint32_t RCC_MSISPEED);
 #endif
 
 #endif /* INC_STM32L475XX_RCC_DRIVER_H_ */
-/* This is also for preparing the release */

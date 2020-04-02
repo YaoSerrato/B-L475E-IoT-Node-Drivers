@@ -9,7 +9,7 @@
  *
  * @author  Yaoctzin Serrato
  *
- * @date    24/February/2019
+ * @date    24/February/2020
  ******************************************************************************
  * @section License
  ******************************************************************************
@@ -75,4 +75,3 @@ void FLASH_SetLatency(uint32_t freq_HCLK);
 #endif
 
 #endif /* INC_STM32L475XX_FLASH_DRIVER_H_ */
-/* This is for hotfix_test */

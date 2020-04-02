@@ -10,7 +10,7 @@
  *
  * @author  Yaoctzin Serrato
  *
- * @date    24/February/2019
+ * @date    24/February/2020
  ******************************************************************************
  * @section License
  ******************************************************************************
@@ -60,6 +60,3 @@ void EXTI0_IRQHandler(void);
 #endif
 
 #endif /* LED_TOGGLE_H_ */
-/* Second commit on develop */
-/* More commits on develop */
-/* This is for preparing the release */

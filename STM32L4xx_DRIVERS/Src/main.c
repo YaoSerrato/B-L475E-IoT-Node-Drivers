@@ -11,7 +11,7 @@
  *
  * @author  Yaoctzin Serrato
  *
- * @date    24/February/2019
+ * @date    24/February/2020
  ******************************************************************************
  * @section License
  ******************************************************************************
@@ -181,7 +181,3 @@ void EXTI15_10_IRQHandler(void)
   GPIO_IRQHandling(GPIO_PIN_13);
 }
 
-/* Initial commit on develop */
-/* Another change in feature_test branch */
-/* More commits on develop */
-/* This is for hotfix_test */
