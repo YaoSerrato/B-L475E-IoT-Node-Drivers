@@ -43,13 +43,13 @@ extern "C"
 /** @name General macro definitions.
  */
 ///@{
-#define	__vo				volatile
-#define	ENABLE				(1UL)
-#define	DISABLE				(0UL)
-#define	SET				ENABLE
-#define	RESET				DISABLE
-#define	GPIO_PIN_SET			SET
-#define	GPIO_PIN_RESET			RESET
+#define	__vo							volatile
+#define	ENABLE							(1UL)
+#define	DISABLE							(0UL)
+#define	SET								ENABLE
+#define	RESET							DISABLE
+#define	GPIO_PIN_SET					SET
+#define	GPIO_PIN_RESET					RESET
 ///@}
 
 /** @name Cortex-M4 NVIC registers addresses
@@ -71,9 +71,9 @@ extern "C"
 /** @name Macros for operations with registers.
  */
 ///@{
-#define READ_REG_BIT(REG, N)		((((unsigned) REG) >> (N)) & (1UL))
-#define SET_REG_BIT(REG, N)		(REG |=  (0x1UL << N))
-#define CLR_REG_BIT(REG, N) 		(REG &= ~(0x1UL << N))
+#define READ_REG_BIT(REG, N)			((((unsigned) REG) >> (N)) & (1UL))
+#define SET_REG_BIT(REG, N)				(REG |=  (0x1UL << N))
+#define CLR_REG_BIT(REG, N) 			(REG &= ~(0x1UL << N))
 ///@}
 
 /** @name Register bits macro definitions.
@@ -136,7 +136,7 @@ extern "C"
 /** @name Base addresses for Peripheral Buses.
  */
 ///@{
-#define	PERIPH_BASE_ADDRESS		(0x40000000U)
+#define	PERIPH_BASE_ADDRESS			(0x40000000U)
 #define APB1PERIPH_BASE_ADDRESS		(PERIPH_BASE_ADDRESS + 0x0U)
 #define APB2PERIPH_BASE_ADDRESS		(PERIPH_BASE_ADDRESS + 0x00010000U)
 #define AHB1PERIPH_BASE_ADDRESS		(PERIPH_BASE_ADDRESS + 0x00020000U)
@@ -149,7 +149,7 @@ extern "C"
 #define DMA1_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x0000U)
 #define DMA2_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x0400U)
 #define RCC_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x1000U)
-#define FLASHREG_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x2000U)
+#define FLASHREG_BASE_ADDRESS	(AHB1PERIPH_BASE_ADDRESS + 0x2000U)
 #define CRC_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x3000U)
 #define TSC_BASE_ADDRESS		(AHB1PERIPH_BASE_ADDRESS + 0x4000U)
 ///@}
@@ -174,13 +174,16 @@ extern "C"
  */
 ///@{
 #define	SYSCFG_BASE_ADDRESS		(APB2PERIPH_BASE_ADDRESS + 0x0000U)
-#define EXTI_BASE_ADDRESS               (APB2PERIPH_BASE_ADDRESS + 0x400U)
+#define EXTI_BASE_ADDRESS       (APB2PERIPH_BASE_ADDRESS + 0x400U)
+#define SPI1_BASE_ADDRESS       (APB2PERIPH_BASE_ADDRESS + 0x3000U)
 ///@}
 
 /** @name Base addresses of APB1 Peripherals.
  */
 ///@{
 #define	PWR_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x7000U)
+#define	SPI2_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3800U)
+#define	SPI3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3C00U)
 ///@}
 
 /*****************************************************************************/
@@ -190,8 +193,8 @@ extern "C"
 typedef struct  /**< Peripheral register definition structure for GPIOx */
 {
   __vo uint32_t GPIO_MODER;		/* Address offset:	0x00 */
-  __vo uint32_t GPIO_OTYPER;		/* Address offset:	0x04 */
-  __vo uint32_t GPIO_OSPEEDR;		/* Address offset:	0x08 */
+  __vo uint32_t GPIO_OTYPER;	/* Address offset:	0x04 */
+  __vo uint32_t GPIO_OSPEEDR;	/* Address offset:	0x08 */
   __vo uint32_t GPIO_PUPDR;		/* Address offset:	0x0C */
   __vo uint32_t GPIO_IDR;		/* Address offset:	0x10 */
   __vo uint32_t GPIO_ODR;		/* Address offset:	0x14 */
@@ -218,46 +221,46 @@ typedef struct  /**< Peripheral register definition structure for GPIOx */
 
 typedef struct  /**< Peripheral register definition structure for RCC */
 {
-  __vo uint32_t RCC_CR;			/* Address offset:	0x00 */
-  __vo uint32_t RCC_ICSCR;		/* Address offset:	0x04 */
-  __vo uint32_t RCC_CFGR;		/* Address offset:	0x08 */
+  __vo uint32_t RCC_CR;				/* Address offset:	0x00 */
+  __vo uint32_t RCC_ICSCR;			/* Address offset:	0x04 */
+  __vo uint32_t RCC_CFGR;			/* Address offset:	0x08 */
   __vo uint32_t RCC_PLLCFGR;		/* Address offset:	0x0C */
   __vo uint32_t RCC_PLLSAI1CFGR;	/* Address offset:	0x10 */
   __vo uint32_t RCC_PLLSAI2CFGR;	/* Address offset:	0x14 */
-  __vo uint32_t RCC_CIER;		/* Address offset:	0x18 */
-  __vo uint32_t RCC_CIFR;		/* Address offset:	0x1C */
-  __vo uint32_t RCC_CICR;		/* Address offset:	0x20 */
-  uint32_t      RESERVED1;		/* Address offset:	0x24 */
+  __vo uint32_t RCC_CIER;			/* Address offset:	0x18 */
+  __vo uint32_t RCC_CIFR;			/* Address offset:	0x1C */
+  __vo uint32_t RCC_CICR;			/* Address offset:	0x20 */
+  uint32_t      RESERVED1;			/* Address offset:	0x24 */
   __vo uint32_t RCC_AHB1RSTR;		/* Address offset:	0x28 */
   __vo uint32_t RCC_AHB2RSTR;		/* Address offset:	0x2C */
   __vo uint32_t RCC_AHB3RSTR;		/* Address offset:	0x30 */
-  uint32_t      RESERVED2;		/* Address offset:	0x34 */
+  uint32_t      RESERVED2;			/* Address offset:	0x34 */
   __vo uint32_t RCC_APB1RSTR1;		/* Address offset:	0x38 */
   __vo uint32_t RCC_APB1RSTR2;		/* Address offset:	0x3C */
   __vo uint32_t RCC_APB2RSTR;		/* Address offset:	0x40 */
-  uint32_t 	RESERVED3;		/* Address offset:	0x44 */
+  uint32_t 		RESERVED3;			/* Address offset:	0x44 */
   __vo uint32_t RCC_AHB1ENR;		/* Address offset:	0x48 */
   __vo uint32_t RCC_AHB2ENR;		/* Address offset:	0x4C */
   __vo uint32_t RCC_AHB3ENR;		/* Address offset:	0x50 */
-  uint32_t 	RESERVED4;		/* Address offset:	0x54 */
+  uint32_t 		RESERVED4;			/* Address offset:	0x54 */
   __vo uint32_t RCC_APB1ENR1;		/* Address offset:	0x58 */
   __vo uint32_t RCC_APB1ENR2;		/* Address offset:	0x5C */
   __vo uint32_t RCC_APB2ENR;		/* Address offset:	0x60 */
-  uint32_t 	RESERVED5;		/* Address offset:	0x64 */
+  uint32_t 		RESERVED5;			/* Address offset:	0x64 */
   __vo uint32_t RCC_AHB1SMENR;		/* Address offset:	0x68 */
   __vo uint32_t RCC_AHB2SMENR;		/* Address offset:	0x6C */
   __vo uint32_t RCC_AHB3SMENR;		/* Address offset:	0x70 */
-  uint32_t 	RESERVED6;		/* Address offset:	0x74 */
+  uint32_t 		RESERVED6;			/* Address offset:	0x74 */
   __vo uint32_t RCC_APB1SMENR1;		/* Address offset:	0x78 */
   __vo uint32_t RCC_APB1SMENR2;		/* Address offset:	0x7C */
   __vo uint32_t RCC_APB2SMENR;		/* Address offset:	0x80 */
-  uint32_t 	RESERVED7;		/* Address offset:	0x84 */
-  __vo uint32_t RCC_CCIPR;		/* Address offset:	0x88 */
-  uint32_t	RESERVED8;		/* Address offset:	0x8C */
-  __vo uint32_t RCC_BDCR;		/* Address offset:	0x90 */
-  __vo uint32_t RCC_CSR;		/* Address offset:	0x94 */
-  __vo uint32_t RCC_CRRCR;		/* Address offset:	0x98 */
-  __vo uint32_t RCC_CCIPR2;		/* Address offset:	0x9C */
+  uint32_t 		RESERVED7;			/* Address offset:	0x84 */
+  __vo uint32_t RCC_CCIPR;			/* Address offset:	0x88 */
+  uint32_t		RESERVED8;			/* Address offset:	0x8C */
+  __vo uint32_t RCC_BDCR;			/* Address offset:	0x90 */
+  __vo uint32_t RCC_CSR;			/* Address offset:	0x94 */
+  __vo uint32_t RCC_CRRCR;			/* Address offset:	0x98 */
+  __vo uint32_t RCC_CCIPR2;			/* Address offset:	0x9C */
 }RCC_RegDef_t;
 
 /** @name RCC registers base address.
@@ -268,23 +271,23 @@ typedef struct  /**< Peripheral register definition structure for RCC */
 
 typedef struct  /**< Peripheral register definition structure for Flash registers */
 {
-  __vo uint32_t FLASH_ACR;		/* Address offset:	0x00 */
+  __vo uint32_t FLASH_ACR;			/* Address offset:	0x00 */
   __vo uint32_t FLASH_PDKEYR;		/* Address offset:	0x04 */
-  __vo uint32_t FLASH_KEYR;		/* Address offset:	0x08 */
+  __vo uint32_t FLASH_KEYR;			/* Address offset:	0x08 */
   __vo uint32_t FLASH_OPTKEYR;		/* Address offset:	0x0C */
-  __vo uint32_t FLASH_SR;		/* Address offset:	0x10 */
-  __vo uint32_t FLASH_CR;		/* Address offset:	0x14 */
-  __vo uint32_t FLASH_ECCR;		/* Address offset:	0x18 */
-  uint32_t 	RESERVED1;		/* Address offset:	0x1C */
-  __vo uint32_t FLASH_OPTR;		/* Address offset:	0x20 */
+  __vo uint32_t FLASH_SR;			/* Address offset:	0x10 */
+  __vo uint32_t FLASH_CR;			/* Address offset:	0x14 */
+  __vo uint32_t FLASH_ECCR;			/* Address offset:	0x18 */
+  uint32_t 		RESERVED1;			/* Address offset:	0x1C */
+  __vo uint32_t FLASH_OPTR;			/* Address offset:	0x20 */
   __vo uint32_t FLASH_PCROP1SR;		/* Address offset:	0x24 */
   __vo uint32_t FLASH_PCROP1ER;		/* Address offset:	0x28 */
   __vo uint32_t FLASH_WRP1AR; 		/* Address offset:	0x2C */
   __vo uint32_t FLASH_WRP1BR;		/* Address offset:	0x30 */
-  uint32_t      RESERVED2;		/* Address offset:	0x34 */
-  uint32_t 	RESERVED3;		/* Address offset:	0x38 */
-  uint32_t 	RESERVED4;		/* Address offset:	0x3C */
-  uint32_t 	RESERVED5;		/* Address offset:	0x40 */
+  uint32_t      RESERVED2;			/* Address offset:	0x34 */
+  uint32_t 		RESERVED3;			/* Address offset:	0x38 */
+  uint32_t 		RESERVED4;			/* Address offset:	0x3C */
+  uint32_t 		RESERVED5;			/* Address offset:	0x40 */
   __vo uint32_t FLASH_PCROP2SR;		/* Address offset:	0x44 */
   __vo uint32_t FLASH_PCROP2ER;		/* Address offset:	0x48 */
   __vo uint32_t FLASH_WRP2AR;		/* Address offset:	0x4C */
@@ -306,7 +309,7 @@ typedef struct  /**< Peripheral register definition structure for Power Control 
   __vo uint32_t PWR_SR1;		/* Address offset:	0x10 */
   __vo uint32_t PWR_SR2;		/* Address offset:	0x14 */
   __vo uint32_t PWR_SCR;		/* Address offset:	0x18 */
-  uint32_t	RESERVED1;		/* Address offset:	0x1C */
+  uint32_t		RESERVED1;		/* Address offset:	0x1C */
   __vo uint32_t PWR_PUCRA;		/* Address offset:	0x20 */
   __vo uint32_t PWR_PDCRA;		/* Address offset:	0x24 */
   __vo uint32_t PWR_PUCRB;		/* Address offset:	0x28 */
@@ -378,6 +381,24 @@ typedef struct  /**< Peripheral register definition structure for SYSCFG */
 #define	SYSCFG							((SYSCFG_RegDef_t*) SYSCFG_BASE_ADDRESS)
 ///@}
 
+typedef struct  /**< Peripheral register definition structure for SPIx */
+{
+  __vo uint32_t SPI_CR1;		/* Address offset:	0x00 */
+  __vo uint32_t SPI_CR2;		/* Address offset:	0x04 */
+  __vo uint32_t SPI_SR;			/* Address offset:	0x08 */
+  __vo uint32_t SPI_DR;			/* Address offset:	0x0C */
+  __vo uint32_t SPI_CRCPR;		/* Address offset:	0x10 */
+  __vo uint32_t SPI_RXCRCR;		/* Address offset:	0x14 */
+  __vo uint32_t SPI_TXCRCR;		/* Address offset:	0x18 */
+}SPI_RegDef_t;
+
+/** @name SPIx register base address.
+ */
+///@{
+#define	SPI1							((SPI_RegDef_t*) SPI1_BASE_ADDRESS)
+#define	SPI2							((SPI_RegDef_t*) SPI2_BASE_ADDRESS)
+#define	SPI3							((SPI_RegDef_t*) SPI3_BASE_ADDRESS)
+///@}
 
 /** @name Clock enable/disable macros for GPIOx peripherals.
  */
@@ -409,12 +430,24 @@ typedef struct  /**< Peripheral register definition structure for SYSCFG */
 #define	PWR_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << 28))
 ///@}
 
-/** @name Clock enable/disable macros for PWR peripheral.
+/** @name Clock enable/disable macros for SYSCFG peripheral.
  */
 ///@{
 #define SYSCFG_PCLK_EN()                        (RCC->RCC_APB2ENR |= (1 << 0))
 
 #define SYSCFG_PCLK_DI()                        (RCC->RCC_APB2ENR &= ~(1 << 0))
+///@}
+
+/** @name Clock enable/disable macros for SPI peripheral.
+ */
+///@{
+#define	SPI1_PCLK_EN()				(RCC->RCC_APB2ENR |= (1 << REG_BIT_12))
+#define	SPI2_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << REG_BIT_14))
+#define	SPI3_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << REG_BIT_15))
+
+#define	SPI1_PCLK_DI()				(RCC->RCC_APB2ENR &= ~(1 << REG_BIT_12))
+#define	SPI2_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << REG_BIT_14))
+#define	SPI3_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << REG_BIT_15))
 ///@}
 
 /** @name GPIO registers reset macros.
@@ -428,6 +461,14 @@ typedef struct  /**< Peripheral register definition structure for SYSCFG */
 #define GPIOF_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 5)); (RCC->RCC_AHB2RSTR &= ~(1 << 5)); }while(0)
 #define GPIOG_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 6)); (RCC->RCC_AHB2RSTR &= ~(1 << 6)); }while(0)
 #define GPIOH_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 7)); (RCC->RCC_AHB2RSTR &= ~(1 << 7)); }while(0)
+///@}
+
+/** @name SPI registers reset macros.
+ */
+///@{
+#define SPI1_REG_RESET()			do{ (RCC->RCC_APB2RSTR |= (1 << REG_BIT_12)); (RCC->RCC_APB2RSTR &= ~(1 << REG_BIT_12)); }while(0)
+#define SPI2_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << REG_BIT_14)); (RCC->RCC_APB1RSTR1 &= ~(1 << REG_BIT_14)); }while(0)
+#define SPI3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << REG_BIT_15)); (RCC->RCC_APB1RSTR1 &= ~(1 << REG_BIT_15)); }while(0)
 ///@}
 
 /** @name Macro that converts GPIO Base Address to a binary number from 0 to 15.
