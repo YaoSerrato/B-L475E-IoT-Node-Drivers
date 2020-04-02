@@ -70,5 +70,67 @@
 *
 * @return       Explanation.
 ******************************************************************************/
+void SPI_PeriphClkControl(SPI_RegDef_t* pSPIx, uint8_t Enabler)
+{
+	  if(Enabler == ENABLE)
+	  {
+		  if(pSPIx == SPI1)
+		  {
+			  SPI1_PCLK_EN();
+		  }
+		  else if(pSPIx == SPI2)
+		  {
+			  SPI2_PCLK_EN();
+		  }
+		  else if(pSPIx == SPI3)
+		  {
+			  SPI3_PCLK_EN();
+		  }
+		  else
+		  {
+			  /* Error, no SPI detected. */
+		  }
+	  }
+	  else
+	  {
+		  if(pSPIx == SPI1)
+		  {
+			  SPI1_PCLK_DI();
+		  }
+		  else if(pSPIx == SPI2)
+		  {
+			  SPI2_PCLK_DI();
+		  }
+		  else if(pSPIx == SPI3)
+		  {
+			  SPI3_PCLK_DI();
+		  }
+		  else
+		  {
+			  /* Error, no SPI detected. */
+		  }
+	  }
+}
+
+/**************************************************************************//**
+* @brief        Brief explanation of this API.
+*
+* @param        param1		Explanation.
+* @param        param1		Explanation.
+*
+* @return       Explanation.
+******************************************************************************/
+void SPI_Init(SPI_Handle_t* pSPIHandle)
+{
+
+}
+
+
+
+
+
+
+
+
 
 
