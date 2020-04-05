@@ -122,7 +122,53 @@ void SPI_PeriphClkControl(SPI_RegDef_t* pSPIx, uint8_t Enabler)
 ******************************************************************************/
 void SPI_Init(SPI_Handle_t* pSPIHandle)
 {
-	/**/
+	/* Configure the serial clock baud rate */
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_BR);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_SCLKspeed << SPI_CR1_BR_2_0);
+
+	/* Configure clock polarity (CPOL) and clock phase (PHA) */
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPOL);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPOL << SPI_CR1_CPOL);
+
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPHA);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPHA << SPI_CR1_CPHA);
+
+	/* Configure the SPI bus (fullduplex, halfduplex or simplex) */
+	switch(pSPIHandle->SPIConfig.SPI_BusConfig)
+	{
+	case SPI_BUSCONFIG_FULLDUPLEX:
+		//BIDIMODE should be cleared
+		CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+		break;
+
+	case SPI_BUSCONFIG_HALFDUPLEX:
+		//BIDIMODE should be set
+		SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+		break;
+
+	case SPI_BUSCONFIG_SIMPLEX_RXONLY:
+		//BIDIMODE should be cleared
+		CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+		//RXONLY must be set
+		SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+		break;
+
+	default:
+		/* Should give an error */
+	}
+
+	/* Configure the data frame */
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_LSBFIRST);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_FirstBit << SPI_CR1_LSBFIRST);
+
+	pSPIHandle->pSPIx->SPI_CR2 &= ~(SPI_CR2_MASK_DS);
+	pSPIHandle->pSPIx->SPI_CR2 |= (pSPIHandle->SPIConfig.SPI_DataLength << SPI_CR2_DS_3_0);
+
+	/* Configure the software slave management */
+
+	/* Configure the device mode (master or slave) */
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_MSTR);
+	pSPIHandle->pSPIx->SPI_CR1 &= (pSPIHandle->SPIConfig.SPI_DeviceMode << SPI_CR1_MSTR);
 }
 
 
