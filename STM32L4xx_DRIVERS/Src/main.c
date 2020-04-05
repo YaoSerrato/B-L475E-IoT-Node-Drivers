@@ -11,7 +11,7 @@
  *
  * @author  Yaoctzin Serrato
  *
- * @date    24/February/2019
+ * @date    24/February/2020
  ******************************************************************************
  * @section License
  ******************************************************************************
@@ -180,3 +180,4 @@ void EXTI15_10_IRQHandler(void)
   /* Clear the EXTI Pending Register */
   GPIO_IRQHandling(GPIO_PIN_13);
 }
+
