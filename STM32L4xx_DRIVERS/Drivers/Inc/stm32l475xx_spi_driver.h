@@ -52,71 +52,78 @@ extern "C"
 /** @name SPI device modes.
  */
 ///@{
-#define	SPI_DEVICE_MODE_SLAVE	(0UL)
-#define	SPI_DEVICE_MODE_MASTER	(1UL)
+#define	SPI_DEVICE_MODE_SLAVE	(0U)
+#define	SPI_DEVICE_MODE_MASTER	(1U)
 ///@}
 
 /** @name SPI bus configurations.
  */
 ///@{
-#define	SPI_BUSCONFIG_FULLDUPLEX		(0UL)
-#define SPI_BUSCONFIG_HALFDUPLEX		(1UL)
-#define SPI_BUSCONFIG_SIMPLEX_RXONLY	(2UL)
+#define	SPI_BUSCONFIG_FULLDUPLEX		(0U)
+#define SPI_BUSCONFIG_HALFDUPLEX		(1U)
+#define SPI_BUSCONFIG_SIMPLEX_RXONLY	(2U)
+///@}
+
+/** @name SPI Half duplex data transfer direction
+ */
+///@{
+#define SPI_HDDTD_MASTER_TO_SLAVE		(0U)
+#define SPI_HDDTD_SLAVE_TO_MASTER		(1U)
 ///@}
 
 /** @name SPI SCLK pre scalers.
  */
 ///@{
-#define	SPI_PCLK_DIV2			(0UL)
-#define	SPI_PCLK_DIV4			(1UL)
-#define	SPI_PCLK_DIV8			(2UL)
-#define	SPI_PCLK_DIV16			(3UL)
-#define	SPI_PCLK_DIV32			(4UL)
-#define	SPI_PCLK_DIV64			(5UL)
-#define	SPI_PCLK_DIV128			(6UL)
-#define	SPI_PCLK_DIV256			(7UL)
+#define	SPI_PCLK_DIV2			(0U)
+#define	SPI_PCLK_DIV4			(1U)
+#define	SPI_PCLK_DIV8			(2U)
+#define	SPI_PCLK_DIV16			(3U)
+#define	SPI_PCLK_DIV32			(4U)
+#define	SPI_PCLK_DIV64			(5U)
+#define	SPI_PCLK_DIV128			(6U)
+#define	SPI_PCLK_DIV256			(7U)
 ///@}
 
 /** @name SPI data frame format.
  */
 ///@{
-#define	SPI_DATAFRAME_4_BITS		(3UL)
-#define	SPI_DATAFRAME_5_BITS		(4UL)
-#define	SPI_DATAFRAME_6_BITS		(5UL)
-#define	SPI_DATAFRAME_7_BITS		(6UL)
-#define	SPI_DATAFRAME_8_BITS		(7UL)
-#define	SPI_DATAFRAME_9_BITS		(8UL)
-#define	SPI_DATAFRAME_10_BITS		(9UL)
-#define	SPI_DATAFRAME_11_BITS		(10UL)
-#define	SPI_DATAFRAME_12_BITS		(11UL)
-#define	SPI_DATAFRAME_13_BITS		(12UL)
-#define	SPI_DATAFRAME_14_BITS		(13UL)
-#define	SPI_DATAFRAME_15_BITS		(14UL)
-#define	SPI_DATAFRAME_16_BITS		(15UL)
+#define	SPI_DATAFRAME_4_BITS		(3U)
+#define	SPI_DATAFRAME_5_BITS		(4U)
+#define	SPI_DATAFRAME_6_BITS		(5U)
+#define	SPI_DATAFRAME_7_BITS		(6U)
+#define	SPI_DATAFRAME_8_BITS		(7U)
+#define	SPI_DATAFRAME_9_BITS		(8U)
+#define	SPI_DATAFRAME_10_BITS		(9U)
+#define	SPI_DATAFRAME_11_BITS		(10U)
+#define	SPI_DATAFRAME_12_BITS		(11U)
+#define	SPI_DATAFRAME_13_BITS		(12U)
+#define	SPI_DATAFRAME_14_BITS		(13U)
+#define	SPI_DATAFRAME_15_BITS		(14U)
+#define	SPI_DATAFRAME_16_BITS		(15U)
 
-#define	SPI_DATAFRAME_MSB_FIRST		(0UL)
-#define	SPI_DATAFRAME_LSB_FIRST		(1UL)
+#define	SPI_DATAFRAME_MSB_FIRST		(0U)
+#define	SPI_DATAFRAME_LSB_FIRST		(1U)
 ///@}
 
 /** @name SPI clock polarity.
  */
 ///@{
-#define	SPI_CPOL_IDLE_LOW			(0UL)
-#define	SPI_CPOL_IDLE_HIGH			(1UL)
+#define	SPI_CPOL_IDLE_LOW			(0U)
+#define	SPI_CPOL_IDLE_HIGH			(1U)
 ///@}
 
 /** @name SPI clock phase.
  */
 ///@{
-#define	SPI_CPHA_FIRST_EDGE			(0UL)
-#define	SPI_CPHA_SECOND_EDGE		(1UL)
+#define	SPI_CPHA_FIRST_EDGE			(0U)
+#define	SPI_CPHA_SECOND_EDGE		(1U)
 ///@}
 
 /** @name SPI slave select management.
  */
 ///@{
-#define	SPI_SSM_DISABLE			(0UL)
-#define	SPI_SSM_ENABLE			(1UL)
+#define	SPI_SSM_DISABLE			(0U)
+#define	SPI_SSM_ENABLE			(1U)
 ///@}
 
 /*****************************************************************************/
@@ -126,6 +133,7 @@ typedef struct  /**< Structure for a SPI peripheral configuration */
 {
 	uint8_t	SPI_DeviceMode;
 	uint8_t	SPI_BusConfig;
+	uint8_t	SPI_HalfDuplexTransferDirection;
 	uint8_t	SPI_SCLKspeed;
 	uint8_t	SPI_DataLength;
 	uint8_t SPI_FirstBit;
