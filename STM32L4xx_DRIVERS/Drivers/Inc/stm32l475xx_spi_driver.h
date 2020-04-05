@@ -128,7 +128,7 @@ typedef struct  /**< Structure for a SPI peripheral configuration */
 	uint8_t	SPI_BusConfig;
 	uint8_t	SPI_SCLKspeed;
 	uint8_t	SPI_DataLength;
-	uint8_t SPI_MSBLSB;
+	uint8_t SPI_FirstBit;
 	uint8_t	SPI_CPOL;
 	uint8_t	SPI_CPHA;
 	uint8_t	SPI_SSM;

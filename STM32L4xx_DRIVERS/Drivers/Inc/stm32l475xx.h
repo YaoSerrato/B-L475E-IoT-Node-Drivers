@@ -111,6 +111,39 @@ extern "C"
 #define	REG_BIT_29			(29UL)
 #define	REG_BIT_30			(30UL)
 #define	REG_BIT_31			(31UL)
+
+#define	BIT_POS_0			REG_BIT_0
+#define	BIT_POS_1			REG_BIT_1
+#define	BIT_POS_2			REG_BIT_2
+#define	BIT_POS_3			REG_BIT_3
+#define	BIT_POS_4			REG_BIT_4
+#define	BIT_POS_5			REG_BIT_5
+#define	BIT_POS_6			REG_BIT_6
+#define	BIT_POS_7			REG_BIT_7
+#define	BIT_POS_8			REG_BIT_8
+#define	BIT_POS_9			REG_BIT_9
+#define	BIT_POS_10			REG_BIT_10
+#define	BIT_POS_11			REG_BIT_11
+#define	BIT_POS_12			REG_BIT_12
+#define	BIT_POS_13			REG_BIT_13
+#define	BIT_POS_14			REG_BIT_14
+#define	BIT_POS_15			REG_BIT_15
+#define	BIT_POS_16			REG_BIT_16
+#define	BIT_POS_17			REG_BIT_17
+#define	BIT_POS_18			REG_BIT_18
+#define	BIT_POS_19			REG_BIT_19
+#define	BIT_POS_20			REG_BIT_20
+#define	BIT_POS_21			REG_BIT_21
+#define	BIT_POS_22			REG_BIT_22
+#define	BIT_POS_23			REG_BIT_23
+#define	BIT_POS_24			REG_BIT_24
+#define	BIT_POS_25			REG_BIT_25
+#define	BIT_POS_26			REG_BIT_26
+#define	BIT_POS_27			REG_BIT_27
+#define	BIT_POS_28			REG_BIT_28
+#define	BIT_POS_29			REG_BIT_29
+#define BIT_POS_30			REG_BIT_30
+#define BIT_POS_31			REG_BIT_31
 ///@}
 
 /** @name IRQ numbers for STM32L475VG.
@@ -190,6 +223,7 @@ extern "C"
   /* TYPEDEFS */
 /*****************************************************************************/
 
+/* ----------------------------------------------------------- GPIO ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for GPIOx */
 {
   __vo uint32_t GPIO_MODER;		/* Address offset:	0x00 */
@@ -219,6 +253,63 @@ typedef struct  /**< Peripheral register definition structure for GPIOx */
 #define	GPIOH				((GPIO_RegDef_t*) GPIOH_BASE_ADDRESS)
 ///@}
 
+/** @name Clock enable/disable macros for GPIOx peripherals.
+ */
+///@{
+#define	GPIOA_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_0))
+#define	GPIOB_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_1))
+#define	GPIOC_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_2))
+#define	GPIOD_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_3))
+#define	GPIOE_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_4))
+#define	GPIOF_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_5))
+#define	GPIOG_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_6))
+#define	GPIOH_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << BIT_POS_7))
+
+#define	GPIOA_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_0))
+#define	GPIOB_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_1))
+#define	GPIOC_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_2))
+#define	GPIOD_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_3))
+#define	GPIOE_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_4))
+#define	GPIOF_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_5))
+#define	GPIOG_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_6))
+#define	GPIOH_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << BIT_POS_7))
+///@}
+
+/** @name GPIO registers reset macros.
+ */
+///@{
+#define GPIOA_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_0));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_0)); }while(0);
+#define GPIOB_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_1));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_1)); }while(0)
+#define GPIOC_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_2));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_2)); }while(0)
+#define GPIOD_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_3));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_3)); }while(0)
+#define GPIOE_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_4));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_4)); }while(0)
+#define GPIOF_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_5));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_5)); }while(0)
+#define GPIOG_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_6));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_6)); }while(0)
+#define GPIOH_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << BIT_POS_7));\
+										(RCC->RCC_AHB2RSTR &= ~(1 << BIT_POS_7)); }while(0)
+///@}
+
+/** @name Macro that converts GPIO Base Address to a binary number from 0 to 15.
+ */
+///@{
+#define GPIO_BASEADDRESS_TO_CODE(x)             ((x == GPIOA) ? 0:\
+                                                 (x == GPIOB) ? 1:\
+                                                 (x == GPIOC) ? 2:\
+                                                 (x == GPIOD) ? 3:\
+                                                 (x == GPIOE) ? 4:\
+                                                 (x == GPIOF) ? 5:\
+                                                 (x == GPIOG) ? 6:\
+                                                 (x == GPIOH) ? 7:0)
+///@}
+
+/* ----------------------------------------------------------- RCC ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for RCC */
 {
   __vo uint32_t RCC_CR;				/* Address offset:	0x00 */
@@ -269,6 +360,7 @@ typedef struct  /**< Peripheral register definition structure for RCC */
 #define	RCC				((RCC_RegDef_t*) RCC_BASE_ADDRESS)
 ///@}
 
+/* ----------------------------------------------------------- FLASH ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for Flash registers */
 {
   __vo uint32_t FLASH_ACR;			/* Address offset:	0x00 */
@@ -300,6 +392,7 @@ typedef struct  /**< Peripheral register definition structure for Flash register
 #define	FLASH						((FLASH_RegDef_t*) FLASHREG_BASE_ADDRESS)
 ///@}
 
+/* ----------------------------------------------------------- PWR ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for Power Control registers */
 {
   __vo uint32_t PWR_CR1;		/* Address offset:	0x00 */
@@ -336,6 +429,15 @@ typedef struct  /**< Peripheral register definition structure for Power Control 
 #define	PWR							((PWR_RegDef_t*) PWR_BASE_ADDRESS)
 ///@}
 
+/** @name Clock enable/disable macros for PWR peripheral.
+ */
+///@{
+#define	PWR_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_28))
+
+#define	PWR_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_28))
+///@}
+
+/* ----------------------------------------------------------- EXTI ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for EXTI */
 {
   __vo uint32_t EXTI_IMR1;              /* Address offset: 0x00 */
@@ -360,6 +462,7 @@ typedef struct  /**< Peripheral register definition structure for EXTI */
 #define	EXTI							((EXTI_RegDef_t*) EXTI_BASE_ADDRESS)
 ///@}
 
+/* ----------------------------------------------------------- SYSCFG ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for SYSCFG */
 {
   __vo uint32_t SYSCFG_MEMRMP;          /* Address offset: 0x00 */
@@ -381,6 +484,15 @@ typedef struct  /**< Peripheral register definition structure for SYSCFG */
 #define	SYSCFG							((SYSCFG_RegDef_t*) SYSCFG_BASE_ADDRESS)
 ///@}
 
+/** @name Clock enable/disable macros for SYSCFG peripheral.
+ */
+///@{
+#define SYSCFG_PCLK_EN()                        (RCC->RCC_APB2ENR |= (1 << BIT_POS_0))
+
+#define SYSCFG_PCLK_DI()                        (RCC->RCC_APB2ENR &= ~(1 << BIT_POS_0))
+///@}
+
+/* ----------------------------------------------------------- SPI ----------------------------------------------------------- */
 typedef struct  /**< Peripheral register definition structure for SPIx */
 {
   __vo uint32_t SPI_CR1;		/* Address offset:	0x00 */
@@ -392,6 +504,38 @@ typedef struct  /**< Peripheral register definition structure for SPIx */
   __vo uint32_t SPI_TXCRCR;		/* Address offset:	0x18 */
 }SPI_RegDef_t;
 
+/** @name SPIx register bit position macros.
+ */
+///@{
+#define	SPI_CR1_CPHA					REG_BIT_0
+#define	SPI_CR1_CPOL					REG_BIT_1
+#define	SPI_CR1_MSTR					REG_BIT_2
+#define	SPI_CR1_BR_2_0					REG_BIT_3
+#define	SPI_CR1_SPE						REG_BIT_6
+#define	SPI_CR1_LSBFIRST				REG_BIT_7
+#define SPI_CR1_SSI						REG_BIT_8
+#define SPI_CR1_SSM						REG_BIT_9
+#define SPI_CR1_RXONLY					REG_BIT_10
+#define SPI_CR1_CRCL					REG_BIT_11
+#define SPI_CR1_CRCNEXT					REG_BIT_12
+#define SPI_CR1_CRCEN					REG_BIT_13
+#define SPI_CR1_BIDIOE					REG_BIT_14
+#define SPI_CR1_BIDIMODE				REG_BIT_15
+
+#define SPI_CRC2_RXDMAEN				REG_BIT_0
+#define SPI_CRC2_TXDMAEN				REG_BIT_1
+#define SPI_CRC2_SSOE					REG_BIT_2
+#define SPI_CRC2_NSSP					REG_BIT_3
+#define SPI_CRC2_FRF					REG_BIT_4
+#define SPI_CRC2_ERRIE					REG_BIT_5
+#define SPI_CRC2_RXNEIE					REG_BIT_6
+#define SPI_CRC2_TXEIE					REG_BIT_7
+#define SPI_CRC2_DS_3_0					REG_BIT_8
+#define SPI_CRC2_FRXTH					REG_BIT_12
+#define SPI_CRC2_LDMA_RX				REG_BIT_13
+#define SPI_CRC2_LDMA_TX				REG_BIT_14
+///@
+
 /** @name SPIx register base address.
  */
 ///@{
@@ -400,89 +544,29 @@ typedef struct  /**< Peripheral register definition structure for SPIx */
 #define	SPI3							((SPI_RegDef_t*) SPI3_BASE_ADDRESS)
 ///@}
 
-/** @name Clock enable/disable macros for GPIOx peripherals.
- */
-///@{
-#define	GPIOA_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 0))
-#define	GPIOB_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 1))
-#define	GPIOC_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 2))
-#define	GPIOD_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 3))
-#define	GPIOE_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 4))
-#define	GPIOF_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 5))
-#define	GPIOG_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 6))
-#define	GPIOH_PCLK_EN()				(RCC->RCC_AHB2ENR |= (1 << 7))
-
-#define	GPIOA_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 0))
-#define	GPIOB_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 1))
-#define	GPIOC_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 2))
-#define	GPIOD_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 3))
-#define	GPIOE_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 4))
-#define	GPIOF_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 5))
-#define	GPIOG_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 6))
-#define	GPIOH_PCLK_DI()				(RCC->RCC_AHB2ENR &= ~(1 << 7))
-///@}
-
-/** @name Clock enable/disable macros for PWR peripheral.
- */
-///@{
-#define	PWR_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << 28))
-
-#define	PWR_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << 28))
-///@}
-
-/** @name Clock enable/disable macros for SYSCFG peripheral.
- */
-///@{
-#define SYSCFG_PCLK_EN()                        (RCC->RCC_APB2ENR |= (1 << 0))
-
-#define SYSCFG_PCLK_DI()                        (RCC->RCC_APB2ENR &= ~(1 << 0))
-///@}
-
 /** @name Clock enable/disable macros for SPI peripheral.
  */
 ///@{
-#define	SPI1_PCLK_EN()				(RCC->RCC_APB2ENR |= (1 << REG_BIT_12))
-#define	SPI2_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << REG_BIT_14))
-#define	SPI3_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << REG_BIT_15))
+#define	SPI1_PCLK_EN()				(RCC->RCC_APB2ENR |= (1 << BIT_POS_12))
+#define	SPI2_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_14))
+#define	SPI3_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_15))
 
-#define	SPI1_PCLK_DI()				(RCC->RCC_APB2ENR &= ~(1 << REG_BIT_12))
-#define	SPI2_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << REG_BIT_14))
-#define	SPI3_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << REG_BIT_15))
-///@}
-
-/** @name GPIO registers reset macros.
- */
-///@{
-#define GPIOA_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 0)); (RCC->RCC_AHB2RSTR &= ~(1 << 0)); }while(0)
-#define GPIOB_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 1)); (RCC->RCC_AHB2RSTR &= ~(1 << 1)); }while(0)
-#define GPIOC_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 2)); (RCC->RCC_AHB2RSTR &= ~(1 << 2)); }while(0)
-#define GPIOD_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 3)); (RCC->RCC_AHB2RSTR &= ~(1 << 3)); }while(0)
-#define GPIOE_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 4)); (RCC->RCC_AHB2RSTR &= ~(1 << 4)); }while(0)
-#define GPIOF_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 5)); (RCC->RCC_AHB2RSTR &= ~(1 << 5)); }while(0)
-#define GPIOG_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 6)); (RCC->RCC_AHB2RSTR &= ~(1 << 6)); }while(0)
-#define GPIOH_REG_RESET()			do{ (RCC->RCC_AHB2RSTR |= (1 << 7)); (RCC->RCC_AHB2RSTR &= ~(1 << 7)); }while(0)
+#define	SPI1_PCLK_DI()				(RCC->RCC_APB2ENR &= ~(1 << BIT_POS_12))
+#define	SPI2_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_14))
+#define	SPI3_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_15))
 ///@}
 
 /** @name SPI registers reset macros.
  */
 ///@{
-#define SPI1_REG_RESET()			do{ (RCC->RCC_APB2RSTR |= (1 << REG_BIT_12)); (RCC->RCC_APB2RSTR &= ~(1 << REG_BIT_12)); }while(0)
-#define SPI2_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << REG_BIT_14)); (RCC->RCC_APB1RSTR1 &= ~(1 << REG_BIT_14)); }while(0)
-#define SPI3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << REG_BIT_15)); (RCC->RCC_APB1RSTR1 &= ~(1 << REG_BIT_15)); }while(0)
+#define SPI1_REG_RESET()			do{ (RCC->RCC_APB2RSTR |= (1 << BIT_POS_12));\
+										(RCC->RCC_APB2RSTR &= ~(1 << BIT_POS_12)); }while(0)
+#define SPI2_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_14));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_14)); }while(0)
+#define SPI3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_15));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_15)); }while(0)
 ///@}
 
-/** @name Macro that converts GPIO Base Address to a binary number from 0 to 15.
- */
-///@{
-#define GPIO_BASEADDRESS_TO_CODE(x)             ((x == GPIOA) ? 0:\
-                                                 (x == GPIOB) ? 1:\
-                                                 (x == GPIOC) ? 2:\
-                                                 (x == GPIOD) ? 3:\
-                                                 (x == GPIOE) ? 4:\
-                                                 (x == GPIOF) ? 5:\
-                                                 (x == GPIOG) ? 6:\
-                                                 (x == GPIOH) ? 7:0)
-///@}
 
 /*****************************************************************************/
   /* CONSTANTS */

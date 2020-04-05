@@ -122,7 +122,7 @@ void SPI_PeriphClkControl(SPI_RegDef_t* pSPIx, uint8_t Enabler)
 ******************************************************************************/
 void SPI_Init(SPI_Handle_t* pSPIHandle)
 {
-
+	/**/
 }
 
 
