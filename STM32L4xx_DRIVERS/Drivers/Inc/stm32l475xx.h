@@ -522,19 +522,40 @@ typedef struct  /**< Peripheral register definition structure for SPIx */
 #define SPI_CR1_BIDIOE					REG_BIT_14
 #define SPI_CR1_BIDIMODE				REG_BIT_15
 
-#define SPI_CRC2_RXDMAEN				REG_BIT_0
-#define SPI_CRC2_TXDMAEN				REG_BIT_1
-#define SPI_CRC2_SSOE					REG_BIT_2
-#define SPI_CRC2_NSSP					REG_BIT_3
-#define SPI_CRC2_FRF					REG_BIT_4
-#define SPI_CRC2_ERRIE					REG_BIT_5
-#define SPI_CRC2_RXNEIE					REG_BIT_6
-#define SPI_CRC2_TXEIE					REG_BIT_7
-#define SPI_CRC2_DS_3_0					REG_BIT_8
-#define SPI_CRC2_FRXTH					REG_BIT_12
-#define SPI_CRC2_LDMA_RX				REG_BIT_13
-#define SPI_CRC2_LDMA_TX				REG_BIT_14
-///@
+#define SPI_CR2_RXDMAEN					REG_BIT_0
+#define SPI_CR2_TXDMAEN					REG_BIT_1
+#define SPI_CR2_SSOE					REG_BIT_2
+#define SPI_CR2_NSSP					REG_BIT_3
+#define SPI_CR2_FRF						REG_BIT_4
+#define SPI_CR2_ERRIE					REG_BIT_5
+#define SPI_CR2_RXNEIE					REG_BIT_6
+#define SPI_CR2_TXEIE					REG_BIT_7
+#define SPI_CR2_DS_3_0					REG_BIT_8
+#define SPI_CR2_FRXTH					REG_BIT_12
+#define SPI_CR2_LDMA_RX					REG_BIT_13
+#define SPI_CR2_LDMA_TX					REG_BIT_14
+///@}
+
+/** @name SPIx register bit position macros.
+ */
+///@{
+#define SPI_CR1_MASK_CPHA				(0x01U)
+#define SPI_CR1_MASK_CPOL				(0x02U)
+#define SPI_CR1_MASK_MSTR				(0x04U)
+#define	SPI_CR1_MASK_BR					(0x38U)
+#define	SPI_CR1_MASK_SPE				(0x40U)
+#define	SPI_CR1_MASK_LSBFIRST			(0x80U)
+#define SPI_CR1_MASK_SSI				(0x100U)
+#define SPI_CR1_MASK_SSM				(0x200U)
+#define SPI_CR1_MASK_RXONLY				(0x400U)
+#define SPI_CR1_MASK_CRCL				(0x800U)
+#define SPI_CR1_MASK_CRCNEXT			(0x1000U)
+#define SPI_CR1_MASK_CRCEN				(0x2000U)
+#define SPI_CR1_MASK_BIDIOE				(0x4000U)
+#define SPI_CR1_MASK_BIDIMODE			(0x8000U)
+
+#define SPI_CR2_MASK_DS					(0xF00U)
+///@}
 
 /** @name SPIx register base address.
  */
