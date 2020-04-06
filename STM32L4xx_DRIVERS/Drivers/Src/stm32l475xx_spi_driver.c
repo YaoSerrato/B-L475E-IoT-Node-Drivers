@@ -126,37 +126,6 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_BR);
 	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_SCLKspeed << SPI_CR1_BR_2_0);
 
-	/* Configure clock polarity (CPOL) and clock phase (PHA) */
-	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPOL);
-	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPOL << SPI_CR1_CPOL);
-
-	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPHA);
-	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPHA << SPI_CR1_CPHA);
-
-	/* Configure the SPI bus (fullduplex, halfduplex or simplex) */
-	switch(pSPIHandle->SPIConfig.SPI_BusConfig)
-	{
-	case SPI_BUSCONFIG_FULLDUPLEX:
-		//BIDIMODE should be cleared
-		CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
-		break;
-
-	case SPI_BUSCONFIG_HALFDUPLEX:
-		//BIDIMODE should be set
-		SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
-		break;
-
-	case SPI_BUSCONFIG_SIMPLEX_RXONLY:
-		//BIDIMODE should be cleared
-		CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
-		//RXONLY must be set
-		SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
-		break;
-
-	default:
-		/* Should give an error */
-	}
-
 	/* Configure the data frame */
 	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_LSBFIRST);
 	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_FirstBit << SPI_CR1_LSBFIRST);
@@ -164,11 +133,163 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 	pSPIHandle->pSPIx->SPI_CR2 &= ~(SPI_CR2_MASK_DS);
 	pSPIHandle->pSPIx->SPI_CR2 |= (pSPIHandle->SPIConfig.SPI_DataLength << SPI_CR2_DS_3_0);
 
-	/* Configure the software slave management */
+	/* Configure clock polarity (CPOL) and clock phase (PHA) */
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPOL);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPOL << SPI_CR1_CPOL);
+
+	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_CPHA);
+	pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_CPHA << SPI_CR1_CPHA);
+
 
 	/* Configure the device mode (master or slave) */
-	pSPIHandle->pSPIx->SPI_CR1 &= ~(SPI_CR1_MASK_MSTR);
-	pSPIHandle->pSPIx->SPI_CR1 &= (pSPIHandle->SPIConfig.SPI_DeviceMode << SPI_CR1_MSTR);
+	switch(pSPIHandle->SPIConfig.SPI_DeviceMode)
+	{
+	/* ------------------------------------------------------------------------------------------------------- */
+		case SPI_DEVICE_MODE_MASTER:
+			pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_DeviceMode << SPI_CR1_MSTR);
+
+			/* Configure the SPI bus (fullduplex, halfduplex or simplex) */
+			switch(pSPIHandle->SPIConfig.SPI_BusConfig)
+			{
+			case SPI_BUSCONFIG_FULLDUPLEX:
+
+				//BIDIMODE should be cleared to allow 2 unidirectional lines
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+				break;
+
+			case SPI_BUSCONFIG_HALFDUPLEX:
+
+				//BIDIMODE should be set to allow 1 bidirectional line
+				SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+				//RXONLY should be cleared to allow either transmission or reception
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+
+				/* Halfduplex data transfer direction configuration */
+				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
+				{
+					/* Transmit only mode */
+					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIOE);
+				}
+				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
+				{
+					/* Receive only mode */
+					/* I don't know if this option is possible at the start because I don't know if the Master produces the clock if it */
+					/* is set to receive at the very first moment */
+					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIOE);
+					/* In spite of that doubt, an web page says that "As soon as SPI enters into receiving mode, STM32 will */
+					/* continuously generate clock on SCK pin until receiving mode is disabled." */
+				}
+				else
+				{
+					/* Should throw an error */
+				}
+				break;
+
+			case SPI_BUSCONFIG_SIMPLEX_RXONLY:
+
+				//BIDIMODE should be cleared
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+
+				/* Simplex data transfer direction configuration */
+				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
+				{
+					/* Transfer only */
+					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+				}
+				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
+				{
+					/* Receive only */
+					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+				}
+				else
+				{
+					/* Should throw an error */
+				}
+				break;
+
+			default:
+				break;
+				/* Should give an error */
+			}
+		break;
+	/* ------------------------------------------------------------------------------------------------------- */
+		case SPI_DEVICE_MODE_SLAVE:
+			pSPIHandle->pSPIx->SPI_CR1 |= (pSPIHandle->SPIConfig.SPI_DeviceMode << SPI_CR1_MSTR);
+
+			/* Configure the software slave management */
+			if(pSPIHandle->SPIConfig.SPI_SSM == SPI_SSM_ENABLE)
+			{
+				SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_SSM);
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_SSI); /* The device will always act as a slave */
+			}
+
+			/* Configure the SPI bus (fullduplex, halfduplex or simplex) */
+			switch(pSPIHandle->SPIConfig.SPI_BusConfig)
+			{
+			case SPI_BUSCONFIG_FULLDUPLEX:
+
+				//BIDIMODE should be cleared to allow 2 unidirectional lines
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+				break;
+
+			case SPI_BUSCONFIG_HALFDUPLEX:
+
+				//BIDIMODE should be set to allow 1 bidirectional line
+				SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+				//RXONLY should be cleared to allow either transmission or reception
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+
+				/* Halfduplex data transfer direction configuration */
+				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
+				{
+					/* Receive only mode */
+					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIOE);
+				}
+				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
+				{
+					/* Transmit only mode */
+					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIOE);
+				}
+				else
+				{
+					/* Should throw an error */
+				}
+				break;
+
+			case SPI_BUSCONFIG_SIMPLEX_RXONLY:
+
+				//BIDIMODE should be cleared
+				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+
+				/* Simplex data transfer direction configuration */
+				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
+				{
+					/* Transfer only */
+					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+				}
+				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
+				{
+					/* Receive only */
+					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+				}
+				else
+				{
+					/* Should throw an error */
+				}
+
+				break;
+
+			default:
+				break;
+				/* Should give an error */
+			}
+		break;
+	/* ------------------------------------------------------------------------------------------------------- */
+		default:
+			break;
+			/* Should throw an error. */
+	}
+
 }
 
 

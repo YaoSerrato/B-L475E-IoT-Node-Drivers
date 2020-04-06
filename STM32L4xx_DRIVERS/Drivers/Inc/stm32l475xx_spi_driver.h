@@ -67,8 +67,8 @@ extern "C"
 /** @name SPI Half duplex data transfer direction
  */
 ///@{
-#define SPI_HDDTD_MASTER_TO_SLAVE		(0U)
-#define SPI_HDDTD_SLAVE_TO_MASTER		(1U)
+#define SPI_TD_MASTER_TO_SLAVE		(0U)
+#define SPI_TD_SLAVE_TO_MASTER		(1U)
 ///@}
 
 /** @name SPI SCLK pre scalers.
@@ -133,7 +133,7 @@ typedef struct  /**< Structure for a SPI peripheral configuration */
 {
 	uint8_t	SPI_DeviceMode;
 	uint8_t	SPI_BusConfig;
-	uint8_t	SPI_HalfDuplexTransferDirection;
+	uint8_t	SPI_TransferDirection;		/* This applies for Half Duplex and Simplex modes */
 	uint8_t	SPI_SCLKspeed;
 	uint8_t	SPI_DataLength;
 	uint8_t SPI_FirstBit;
