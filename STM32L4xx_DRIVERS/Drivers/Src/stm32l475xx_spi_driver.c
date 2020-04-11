@@ -193,12 +193,12 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 				/* Simplex data transfer direction configuration */
 				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
 				{
-					/* Transfer only */
+					/* Transmit only mode for master */
 					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
 				}
 				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
 				{
-					/* Receive only */
+					/* Receive only mode for master */
 					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
 				}
 				else
@@ -264,12 +264,12 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 				/* Simplex data transfer direction configuration */
 				if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_MASTER_TO_SLAVE)
 				{
-					/* Transfer only */
+					/* Receive only for slave */
 					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
 				}
 				else if(pSPIHandle->SPIConfig.SPI_TransferDirection == SPI_TD_SLAVE_TO_MASTER)
 				{
-					/* Receive only */
+					/* Transfer only for slave */
 					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
 				}
 				else
@@ -292,7 +292,18 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 
 }
 
+/**************************************************************************//**
+* @brief        Brief explanation of this API.
+*
+* @param        param1		Explanation.
+* @param        param1		Explanation.
+*
+* @return       Explanation.
+******************************************************************************/
+void SPI_Transmit(SPI_RegDef_t* pSPIx, uint8_t* pTxBuffer, uint32_t DataLenght)
+{
 
+}
 
 
 
