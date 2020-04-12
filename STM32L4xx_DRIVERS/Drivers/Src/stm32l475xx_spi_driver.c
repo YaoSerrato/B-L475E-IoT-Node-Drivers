@@ -155,6 +155,8 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 
 				//BIDIMODE should be cleared to allow 2 unidirectional lines
 				CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIMODE);
+				// The master at Full duplex starts to communicate when the SPI is enabled and the TX FIFO is NOT empty.
+
 				break;
 
 			case SPI_BUSCONFIG_HALFDUPLEX:
@@ -178,6 +180,8 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 					CLR_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_BIDIOE);
 					/* In spite of that doubt, an web page says that "As soon as SPI enters into receiving mode, STM32 will */
 					/* continuously generate clock on SCK pin until receiving mode is disabled." */
+					/* This might be true because the reference manual says: "In any master receive only mode, master starts to communicate and" */
+					/* "the clock starts running immediately after the SPI is enabled". */
 				}
 				else
 				{
@@ -200,6 +204,8 @@ void SPI_Init(SPI_Handle_t* pSPIHandle)
 				{
 					/* Receive only mode for master */
 					SET_REG_BIT(pSPIHandle->pSPIx->SPI_CR1, SPI_CR1_RXONLY);
+					/* "In any master receive only mode, master starts to communicate and the clock starts running immediately after the" */
+					/* "SPI is enabled". */
 				}
 				else
 				{
