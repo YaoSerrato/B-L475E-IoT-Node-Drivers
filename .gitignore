@@ -82,7 +82,3 @@ ctrlp.root
 RemoteSystemsTempFiles/.project
 
 STM32L4xx_DRIVERS/Debug/
-
-*.launch
-*.cproject
-*.project

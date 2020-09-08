@@ -72,8 +72,8 @@ int main()
 
   while(1)
   {
-    //GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-    //delay();
+    GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+    delay();
   }
 }
 
@@ -88,7 +88,7 @@ int main()
  *****************************************************************************/
 void delay(void)
 {
-  for(uint64_t i = 0 ; i < 200 ; i++);
+  for(uint64_t i = 0 ; i < 20000 ; i++);
 }
 
  /*************************************************************************//**
@@ -103,7 +103,7 @@ void App_RCC_Init(void)
   }
 
   /* Configuring oscillator */
-  if(RCC_Config_MSI(RCC_MSISPEED_4M, 0x0U, RCC_AHBPRESCALER_DIV1) != RCC_STATUS_OK)
+  if(RCC_Config_MSI(RCC_MSISPEED_4M, 0x0U, RCC_AHBPRESCALER_DIV4) != RCC_STATUS_OK)
   //if(RCC_Config_HSI(RCC_AHBPRESCALER_DIV1) != RCC_STATUS_OK)
   //if(RCC_Config_PLLCLK(RCC_PLLSRC_MSI, RCC_MSISPEED_32M, RCC_PLLM_6, 13, RCC_PLLR_2, RCC_AHBPRESCALER_DIV1) != RCC_STATUS_OK)
   //if(RCC_Config_LSI(SET) != RCC_STATUS_OK)
