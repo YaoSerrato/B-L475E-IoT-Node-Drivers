@@ -41,6 +41,38 @@ extern "C"
   /* DEFINES */
 /*****************************************************************************/
 
+/** @name USART word length macro definitions.
+ */
+///@{
+#define	USART_WORDLENGTH_7			(2U)
+#define	USART_WORDLENGTH_8			(0U)
+#define	USART_WORDLENGTH_9			(1U)
+///@}
+
+/** @name USART oversampling macro definitions.
+ */
+///@{
+#define	USART_OVERSAMPLING_8		(1U)
+#define	USART_OVERSAMPLING_16		(0U)
+///@}
+
+/** @name USART parity macro definitions.
+ */
+///@{
+#define	USART_PARITY_ENABLED		(1U)
+#define	USART_PARITY_DISABLED		(0U)
+#define	USART_PARITY_EVEN			(0U)
+#define	USART_PARITY_ODD			(1U)
+///@}
+
+/** @name USART stop bits macro definitions.
+ */
+///@{
+#define	USART_STOPBITS_05			(1U)
+#define	USART_STOPBITS_10			(0U)
+#define	USART_STOPBITS_15			(3U)
+#define	USART_STOPBITS_20			(2U)
+///@}
 
 
 /*****************************************************************************/
@@ -48,12 +80,14 @@ extern "C"
 /*****************************************************************************/
 typedef struct	/**< Structure with configuration parameters for USART instance */
 {
-	unsigned char USART_Mode;
-	unsigned char USART_Baudrate;
-	unsigned char USART_StopBits;
-	unsigned char USART_WordLength;
-	unsigned char USART_Parity;
-	unsigned char USART_HWFlowControl;
+	uint8_t USART_Mode;
+	uint8_t USART_Baudrate;
+	uint8_t USART_StopBits;
+	uint8_t USART_WordLength;
+	uint8_t USART_ParityControl;
+	uint8_t USART_ParitySelection;
+	uint8_t USART_HWFlowControl;
+	uint8_t USART_Oversampling;
 }USART_Config_t;
 
 typedef struct	/**< Structure for handling a USART instance */
