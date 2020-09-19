@@ -599,7 +599,7 @@ typedef struct  /**< Peripheral register definition structure for USARTx */
 #define	USART2				((USART_RegDef_t*) USART2_BASE_ADDRESS)
 #define	USART3				((USART_RegDef_t*) USART3_BASE_ADDRESS)
 #define	UART4				((USART_RegDef_t*) UART4_BASE_ADDRESS)
-#define	UART4				((USART_RegDef_t*) UART5_BASE_ADDRESS)
+#define	UART5				((USART_RegDef_t*) UART5_BASE_ADDRESS)
 ///@}
 
 /** @name Clock enable/disable macros for USARTx peripherals.
@@ -617,6 +617,23 @@ typedef struct  /**< Peripheral register definition structure for USARTx */
 #define	UART4_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_19))
 #define	UART5_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_20))
 ///@}
+
+/** @name USART registers reset macros.
+ */
+///@{
+#define USART1_REG_RESET()			do{ (RCC->RCC_APB2RSTR |= (1 << BIT_POS_14));\
+										(RCC->RCC_APB2RSTR &= ~(1 << BIT_POS_14)); }while(0);
+#define USART2_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_17));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_17)); }while(0);
+#define USART3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_18));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_18)); }while(0);
+#define UART4_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_19));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_19)); }while(0);
+#define UART5_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_20));\
+										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_20)); }while(0);
+///@}
+
+
 
 /*****************************************************************************/
   /* CONSTANTS */
