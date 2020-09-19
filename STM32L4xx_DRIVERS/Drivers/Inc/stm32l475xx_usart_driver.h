@@ -46,7 +46,21 @@ extern "C"
 /*****************************************************************************/
   /* TYPEDEFS */
 /*****************************************************************************/
+typedef struct	/**< Structure with configuration parameters for USART instance */
+{
+	unsigned char USART_Mode;
+	unsigned char USART_Baudrate;
+	unsigned char USART_StopBits;
+	unsigned char USART_WordLength;
+	unsigned char USART_Parity;
+	unsigned char USART_HWFlowControl;
+}USART_Config_t;
 
+typedef struct	/**< Structure for handling a USART instance */
+{
+	USART_RegDef_t	*pUSARTx;
+	USART_Config_t	USART_config;
+}USART_Handle_t;
 
 
 /*****************************************************************************/
