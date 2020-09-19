@@ -211,8 +211,8 @@ extern "C"
 #define	SPI3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3C00U)
 #define USART2_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4400U)
 #define USART3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4800U)
-#define USART4_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4C00U)
-#define USART5_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x5000U)
+#define UART4_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4C00U)
+#define UART5_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x5000U)
 #define	PWR_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x7000U)
 ///@}
 
@@ -575,6 +575,48 @@ typedef struct  /**< Peripheral register definition structure for SPIx */
 										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_15)); }while(0)
 ///@}
 
+
+/* ----------------------------------------------------------- USART ----------------------------------------------------------- */
+typedef struct  /**< Peripheral register definition structure for USARTx */
+{
+  __vo uint32_t USART_CR1;		/* Address offset:	0x00 */
+  __vo uint32_t USART_CR2;		/* Address offset:	0x04 */
+  __vo uint32_t USART_CR3;		/* Address offset:	0x08 */
+  __vo uint32_t USART_BRR;		/* Address offset:	0x0C */
+  __vo uint32_t USART_GTPR;		/* Address offset:	0x10 */
+  __vo uint32_t USART_RTOR;		/* Address offset:	0x14 */
+  __vo uint32_t USART_RQR;		/* Address offset:	0x18 */
+  __vo uint32_t USART_ISR;		/* Address offset:	0x1C */
+  __vo uint32_t USART_ICR;		/* Address offset:	0x20 */
+  __vo uint32_t USART_RDR;		/* Address offset:	0x24 */
+  __vo uint32_t USART_TDR;		/* Address offset:	0x28 */
+}USART_RegDef_t;
+
+/** @name USART registers base addresses.
+ */
+///@{
+#define	USART1				((USART_RegDef_t*) USART1_BASE_ADDRESS)
+#define	USART2				((USART_RegDef_t*) USART2_BASE_ADDRESS)
+#define	USART3				((USART_RegDef_t*) USART3_BASE_ADDRESS)
+#define	UART4				((USART_RegDef_t*) UART4_BASE_ADDRESS)
+#define	UART4				((USART_RegDef_t*) UART5_BASE_ADDRESS)
+///@}
+
+/** @name Clock enable/disable macros for USARTx peripherals.
+ */
+///@{
+#define	USART1_PCLK_EN()			(RCC->RCC_APB2ENR |= (1 << BIT_POS_14))
+#define	USART2_PCLK_EN()			(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_17))
+#define	USART3_PCLK_EN()			(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_18))
+#define	UART4_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_19))
+#define	UART5_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_20))
+
+#define	USART1_PCLK_DI()			(RCC->RCC_APB2ENR &= ~(1 << BIT_POS_14))
+#define	USART2_PCLK_DI()			(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_17))
+#define	USART3_PCLK_DI()			(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_18))
+#define	UART4_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_19))
+#define	UART5_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_20))
+///@}
 
 /*****************************************************************************/
   /* CONSTANTS */
