@@ -54,4 +54,94 @@
   /* FUNCTION DEFINITIONS */
 /*****************************************************************************/
 
+/**************************************************************************//**
+* @brief       This function enables/disables the USART/UART module.
+*
+* @param       pUSARTx  Base address of respective USARTx.
+* @param       Enabler  Determines whether the USARTx module must be enabled
+* 						or disabled.
+******************************************************************************/
+void	USART_PeripheralControl(USART_RegDef_t *pUSARTx, uint8_t Enabler)
+{
+	if(Enabler == ENABLE)
+	{
+		pUSARTx->USART_CR1 |= (1U << REG_BIT_0);
+	}
+	else
+	{
+		pUSARTx->USART_CR1 &= ~(1U << REG_BIT_0);
+	}
+}
+
+/**************************************************************************//**
+* @brief       This function enables/disables the USART/UART peripheral clock.
+*
+* @param       pUSARTx  Base address of respective USARTx.
+* @param       Enabler  Determines whether the USARTx peripheral clock must be
+* 						enabled or disabled.
+******************************************************************************/
+void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t Enabler)
+{
+	if(Enabler == ENABLE)
+	{
+		/* USARTx will be enabled */
+
+		if(pUSARTx == USART1)
+		{
+			USART1_PCLK_EN();
+		}
+		else if(pUSARTx == USART2)
+		{
+			USART2_PCLK_EN();
+		}
+		else if(pUSARTx == USART3)
+		{
+			USART3_PCLK_EN();
+		}
+		else if(pUSARTx == UART4)
+		{
+			UART4_PCLK_EN();
+		}
+		else if(pUSARTx == UART5)
+		{
+			UART5_PCLK_EN();
+		}
+		else
+		{
+			/* TODO: Should return an error and should not let the code compile. */
+		}
+	}
+	else
+	{
+		/* USARTx will be disabled */
+
+		if(pUSARTx == USART1)
+		{
+			USART1_PCLK_DI();
+		}
+		else if(pUSARTx == USART2)
+		{
+			USART2_PCLK_DI();
+		}
+		else if(pUSARTx == USART3)
+		{
+			USART3_PCLK_DI();
+		}
+		else if(pUSARTx == UART4)
+		{
+			UART4_PCLK_DI();
+		}
+		else if(pUSARTx == UART5)
+		{
+			UART5_PCLK_DI();
+		}
+		else
+		{
+			/* TODO: Should return an error and should not let the code compile. */
+		}
+	}
+}
+
+
+
 
