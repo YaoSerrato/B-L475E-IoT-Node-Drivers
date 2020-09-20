@@ -65,11 +65,11 @@ void	USART_PeripheralControl(USART_RegDef_t *pUSARTx, uint8_t Enabler)
 {
 	if(Enabler == ENABLE)
 	{
-		pUSARTx->USART_CR1 |= (1U << REG_BIT_0);
+		SET_REG_BIT(pUSARTx->USART_CR1, REG_BIT_0);
 	}
 	else
 	{
-		pUSARTx->USART_CR1 &= ~(1U << REG_BIT_0);
+		CLR_REG_BIT(pUSARTx->USART_CR1, REG_BIT_0);
 	}
 }
 

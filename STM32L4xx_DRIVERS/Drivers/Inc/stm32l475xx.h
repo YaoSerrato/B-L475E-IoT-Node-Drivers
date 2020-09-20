@@ -605,32 +605,38 @@ typedef struct  /**< Peripheral register definition structure for USARTx */
 /** @name Clock enable/disable macros for USARTx peripherals.
  */
 ///@{
-#define	USART1_PCLK_EN()			(RCC->RCC_APB2ENR |= (1 << BIT_POS_14))
-#define	USART2_PCLK_EN()			(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_17))
-#define	USART3_PCLK_EN()			(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_18))
-#define	UART4_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_19))
-#define	UART5_PCLK_EN()				(RCC->RCC_APB1ENR1 |= (1 << BIT_POS_20))
+//#define	USART1_PCLK_EN()			(RCC->RCC_APB2ENR |= (1 << BIT_POS_14))
 
-#define	USART1_PCLK_DI()			(RCC->RCC_APB2ENR &= ~(1 << BIT_POS_14))
-#define	USART2_PCLK_DI()			(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_17))
-#define	USART3_PCLK_DI()			(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_18))
-#define	UART4_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_19))
-#define	UART5_PCLK_DI()				(RCC->RCC_APB1ENR1 &= ~(1 << BIT_POS_20))
+#define USART1_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB2ENR, BIT_POS_14)
+#define	USART2_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_17)
+#define	USART3_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_18)
+#define	UART4_PCLK_EN()				SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_19)
+#define	UART5_PCLK_EN()				SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_20)
+
+#define	USART1_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB2ENR, BIT_POS_14)
+#define	USART2_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_17)
+#define	USART3_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_18)
+#define	UART4_PCLK_DI()				CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_19)
+#define	UART5_PCLK_DI()				CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_20)
 ///@}
 
 /** @name USART registers reset macros.
  */
 ///@{
-#define USART1_REG_RESET()			do{ (RCC->RCC_APB2RSTR |= (1 << BIT_POS_14));\
-										(RCC->RCC_APB2RSTR &= ~(1 << BIT_POS_14)); }while(0);
-#define USART2_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_17));\
-										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_17)); }while(0);
-#define USART3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_18));\
-										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_18)); }while(0);
-#define UART4_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_19));\
-										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_19)); }while(0);
-#define UART5_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_20));\
-										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_20)); }while(0);
+#define USART1_REG_RESET()			do{ SET_REG_BIT(RCC->RCC_APB2RSTR, BIT_POS_14);\
+										CLR_REG_BIT(RCC->RCC_APB2RSTR, BIT_POS_14);}while(0);
+
+#define USART2_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_17);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_17);}while(0);
+
+#define USART3_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_18);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_18);}while(0);
+
+#define UART4_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_19);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_19);}while(0);
+
+#define UART5_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_20);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_20);}while(0);
 ///@}
 
 
