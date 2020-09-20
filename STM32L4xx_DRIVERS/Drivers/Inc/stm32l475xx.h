@@ -44,8 +44,8 @@ extern "C"
  */
 ///@{
 #define	__vo							volatile
-#define	ENABLE							(1UL)
-#define	DISABLE							(0UL)
+#define	ENABLE							(1U)
+#define	DISABLE							(0U)
 #define	SET								ENABLE
 #define	RESET							DISABLE
 #define	GPIO_PIN_SET					SET
@@ -65,52 +65,52 @@ extern "C"
 
 #define NVIC_PRIORITY_BASE_ADDRESS      (__vo uint32_t*)0xE000E400
 
-#define NO_PR_BITS_IMPLEMENTED          (4)
+#define NO_PR_BITS_IMPLEMENTED          (4U)
 ///@}
 
 /** @name Macros for operations with registers.
  */
 ///@{
-#define READ_REG_BIT(REG, N)			((((unsigned) REG) >> (N)) & (1UL))
-#define SET_REG_BIT(REG, N)				(REG |=  (0x1UL << N))
-#define CLR_REG_BIT(REG, N) 			(REG &= ~(0x1UL << N))
+#define READ_REG_BIT(REG, N)			((((unsigned) REG) >> (N)) & (1U))
+#define SET_REG_BIT(REG, N)				(REG |=  (0x1U << N))
+#define CLR_REG_BIT(REG, N) 			(REG &= ~(0x1U << N))
 ///@}
 
 /** @name Register bits macro definitions.
  */
 ///@{
-#define	REG_BIT_0			(0UL)
-#define	REG_BIT_1			(1UL)
-#define	REG_BIT_2			(2UL)
-#define	REG_BIT_3			(3UL)
-#define	REG_BIT_4			(4UL)
-#define	REG_BIT_5			(5UL)
-#define	REG_BIT_6			(6UL)
-#define	REG_BIT_7			(7UL)
-#define	REG_BIT_8			(8UL)
-#define	REG_BIT_9			(9UL)
-#define	REG_BIT_10			(10UL)
-#define	REG_BIT_11			(11UL)
-#define	REG_BIT_12			(12UL)
-#define	REG_BIT_13			(13UL)
-#define	REG_BIT_14			(14UL)
-#define	REG_BIT_15			(15UL)
-#define	REG_BIT_16			(16UL)
-#define	REG_BIT_17			(17UL)
-#define	REG_BIT_18			(18UL)
-#define	REG_BIT_19			(19UL)
-#define	REG_BIT_20			(20UL)
-#define	REG_BIT_21			(21UL)
-#define	REG_BIT_22			(22UL)
-#define	REG_BIT_23			(23UL)
-#define	REG_BIT_24			(24UL)
-#define	REG_BIT_25			(25UL)
-#define	REG_BIT_26			(26UL)
-#define	REG_BIT_27			(27UL)
-#define	REG_BIT_28			(28UL)
-#define	REG_BIT_29			(29UL)
-#define	REG_BIT_30			(30UL)
-#define	REG_BIT_31			(31UL)
+#define	REG_BIT_0			(0U)
+#define	REG_BIT_1			(1U)
+#define	REG_BIT_2			(2U)
+#define	REG_BIT_3			(3U)
+#define	REG_BIT_4			(4U)
+#define	REG_BIT_5			(5U)
+#define	REG_BIT_6			(6U)
+#define	REG_BIT_7			(7U)
+#define	REG_BIT_8			(8U)
+#define	REG_BIT_9			(9U)
+#define	REG_BIT_10			(10U)
+#define	REG_BIT_11			(11U)
+#define	REG_BIT_12			(12U)
+#define	REG_BIT_13			(13U)
+#define	REG_BIT_14			(14U)
+#define	REG_BIT_15			(15U)
+#define	REG_BIT_16			(16U)
+#define	REG_BIT_17			(17U)
+#define	REG_BIT_18			(18U)
+#define	REG_BIT_19			(19U)
+#define	REG_BIT_20			(20U)
+#define	REG_BIT_21			(21U)
+#define	REG_BIT_22			(22U)
+#define	REG_BIT_23			(23U)
+#define	REG_BIT_24			(24U)
+#define	REG_BIT_25			(25U)
+#define	REG_BIT_26			(26U)
+#define	REG_BIT_27			(27U)
+#define	REG_BIT_28			(28U)
+#define	REG_BIT_29			(29U)
+#define	REG_BIT_30			(30U)
+#define	REG_BIT_31			(31U)
 
 #define	BIT_POS_0			REG_BIT_0
 #define	BIT_POS_1			REG_BIT_1
