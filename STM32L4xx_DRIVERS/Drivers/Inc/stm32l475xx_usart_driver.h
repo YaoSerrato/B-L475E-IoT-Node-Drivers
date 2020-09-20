@@ -74,6 +74,20 @@ extern "C"
 #define	USART_STOPBITS_20			(2U)
 ///@}
 
+/** @name USART flags macro definitions.
+ */
+///@{
+#define	USART_PE_FLAG				(0U)
+#define	USART_FE_FLAG				(1U)
+#define	USART_NF_FLAG				(2U)
+#define	USART_ORE_FLAG				(3U)
+#define	USART_IDLE_FLAG				(4U)
+#define	USART_RXNE_FLAG				(5U)
+#define	USART_TC_FLAG				(6U)
+#define	USART_TXE_FLAG				(7U)
+#define	USART_BUSY_FLAG				(16U)
+///@}
+
 
 /*****************************************************************************/
   /* TYPEDEFS */
@@ -140,8 +154,8 @@ void	USART_IRQHandling(USART_Handle_t *pUSARThandle);
  * Other peripheral control APIs
  */
 void	USART_PeripheralControl(USART_RegDef_t *pUSARTx, uint8_t Enabler);
-uint8_t	USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint32_t FlagName);
-void	USART_ClearFlag(USART_RegDef_t *pUSARTx, uint16_t FlagName);
+uint8_t	USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint8_t Flag);
+void	USART_ClearFlag(USART_RegDef_t *pUSARTx, uint8_t Flag);
 
 
 /*

@@ -142,6 +142,30 @@ void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t Enabler)
 	}
 }
 
+/**************************************************************************//**
+* @brief       This function returns the bit value of the specified Flag.
+*
+* @param       pUSARTx  Base address of respective USARTx.
+* @param       Flag		Flag offset.
+*
+* @return      Bit value of the Flag specified.
+******************************************************************************/
+uint8_t	USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint8_t Flag)
+{
+	return READ_REG_BIT(pUSARTx->USART_ISR, Flag);
+}
+
+/**************************************************************************//**
+* @brief       This function clears the bit value of the specified Flag.
+*
+* @param       pUSARTx  Base address of respective USARTx.
+* @param       Flag		Flag offset.
+******************************************************************************/
+void	USART_ClearFlag(USART_RegDef_t *pUSARTx, uint8_t Flag)
+{
+	CLR_REG_BIT(pUSARTx->USART_ISR, Flag);
+}
+
 
 
 
