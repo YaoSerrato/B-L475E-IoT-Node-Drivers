@@ -80,14 +80,14 @@ extern "C"
 /*****************************************************************************/
 typedef struct	/**< Structure with configuration parameters for USART instance */
 {
-	uint8_t USART_Mode;
-	uint8_t USART_Baudrate;
-	uint8_t USART_StopBits;
-	uint8_t USART_WordLength;
-	uint8_t USART_ParityControl;
-	uint8_t USART_ParitySelection;
-	uint8_t USART_HWFlowControl;
-	uint8_t USART_Oversampling;
+	uint8_t		USART_Mode;
+	uint32_t	USART_Baudrate;
+	uint8_t		USART_StopBits;
+	uint8_t		USART_WordLength;
+	uint8_t		USART_ParityControl;
+	uint8_t		USART_ParitySelection;
+	uint8_t		USART_HWFlowControl;
+	uint8_t		USART_Oversampling;
 }USART_Config_t;
 
 typedef struct	/**< Structure for handling a USART instance */
@@ -107,6 +107,47 @@ typedef struct	/**< Structure for handling a USART instance */
   /* FUNCTION DECLARATIONS */
 /*****************************************************************************/
 
+/*
+ * Peripheral clock control
+ */
+void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t Enabler);
+
+
+/*
+ * Init and Deinit
+ */
+void	USART_Init(USART_Handle_t *pUSARThandle);
+void 	USART_DeInit(USART_RegDef_t	*pUSARTx);
+
+
+/*
+ * Data send and receive
+ */
+void	USART_SendData(USART_RegDef_t *pUSARTx, uint8_t *pTxBuffer, uint32_t TxBufferLength);
+void	USART_ReceiveData(USART_RegDef_t *pUSARTx, uint8_t *pRxBuffer, uint32_t RxBufferLength);
+uint8_t	USART_SendDataIT(USART_Handle_t *pUSARThandle, uint8_t *pTxBuffer, uint32_t TxBufferLength);
+uint8_t	USART_ReceiveDataIT(USART_Handle_t *pUSARThandle, uint8_t *pRxBuffer, uint32_t RxBufferLength);
+
+
+/*
+ * IRQ configuration and ISR handling
+ */
+void	USART_IRQConfig(uint8_t IRQnumber, uint8_t IRQpriority, uint8_t Enabler);
+void	USART_IRQHandling(USART_Handle_t *pUSARThandle);
+
+
+/*
+ * Other peripheral control APIs
+ */
+void	USART_PeripheralControl(USART_RegDef_t *pUSARTx, uint8_t Enabler);
+uint8_t	USART_GetFlagStatus(USART_RegDef_t *pUSARTx, uint32_t FlagName);
+void	USART_ClearFlag(USART_RegDef_t *pUSARTx, uint16_t FlagName);
+
+
+/*
+ * Application callback
+ */
+void	USART_ApplicationEventCallback(USART_Handle_t *pUSARThandle, uint8_t AppEvt);
 
 
 #ifdef __cplusplus
