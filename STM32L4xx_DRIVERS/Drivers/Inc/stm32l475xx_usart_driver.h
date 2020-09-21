@@ -41,6 +41,34 @@ extern "C"
   /* DEFINES */
 /*****************************************************************************/
 
+/** @name USART mode macro definitions.
+ */
+///@{
+#define	USART_MODE_TXONLY			(0U)
+#define	USART_MODE_RXONLY			(1U)
+#define	USART_MODE_TX_RX			(2U)
+///@}
+
+/** @name USART baudrates macro definitions.
+ */
+///@{
+#define	USART_STD_BAUDRATE_1200		(1200U)
+#define	USART_STD_BAUDRATE_2400		(2400U)
+#define	USART_STD_BAUDRATE_9600		(9600U)
+#define	USART_STD_BAUDRATE_19200	(19200U)
+#define	USART_STD_BAUDRATE_38400	(38400U)
+#define	USART_STD_BAUDRATE_57600	(57600U)
+#define	USART_STD_BAUDRATE_115200	(115200U)
+#define	USART_STD_BAUDRATE_230400	(230400U)
+#define	USART_STD_BAUDRATE_460800	(460800U)
+#define	USART_STD_BAUDRATE_921600	(921600U)
+#define	USART_STD_BAUDRATE_2M		(2000000U)
+#define	USART_STD_BAUDRATE_3M		(3000000U)
+
+#define	USART_CLOCKSOURCE_VALUE		((uint32_t)16000000)		/* USART clock source is temporarily hardcoded to HSI16 */
+#define	USART_BRR_USARTDIV_LIMIT	(0x10U)
+///@}
+
 /** @name USART word length macro definitions.
  */
 ///@{
@@ -60,7 +88,6 @@ extern "C"
  */
 ///@{
 #define	USART_PARITY_ENABLED		(1U)
-#define	USART_PARITY_DISABLED		(0U)
 #define	USART_PARITY_EVEN			(0U)
 #define	USART_PARITY_ODD			(1U)
 ///@}
@@ -100,7 +127,7 @@ typedef struct	/**< Structure with configuration parameters for USART instance *
 	uint8_t		USART_WordLength;
 	uint8_t		USART_ParityControl;
 	uint8_t		USART_ParitySelection;
-	uint8_t		USART_HWFlowControl;
+	//uint8_t		USART_HWFlowControl;
 	uint8_t		USART_Oversampling;
 }USART_Config_t;
 
@@ -124,7 +151,7 @@ typedef struct	/**< Structure for handling a USART instance */
 /*
  * Peripheral clock control
  */
-void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t Enabler);
+void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t ClockSource, uint8_t Enabler);
 
 
 /*
