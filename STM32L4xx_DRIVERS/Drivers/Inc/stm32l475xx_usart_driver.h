@@ -115,6 +115,15 @@ extern "C"
 #define	USART_BUSY_FLAG				(16U)
 ///@}
 
+/** @name USART clock source macro definitions.
+ */
+///@{
+#define	USART_CLKSOURCE_PCLK		(0U)
+#define	USART_CLKSOURCE_SYSCLK		(1U)
+#define	USART_CLKSOURCE_HSI16		(2U)
+#define	USART_CLKSOURCE_LSE			(3U)
+///@}
+
 
 /*****************************************************************************/
   /* TYPEDEFS */

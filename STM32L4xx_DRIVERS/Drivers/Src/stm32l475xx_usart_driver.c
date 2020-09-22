@@ -63,6 +63,8 @@
 ******************************************************************************/
 void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t ClockSource, uint8_t Enabler)
 {
+	uint8_t	offset = 0;
+
 	if(Enabler == ENABLE)
 	{
 		/* USARTx will be enabled */
@@ -71,35 +73,35 @@ void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t ClockSource, uint8_
 		{
 			/* TODO: configure the clock source based on ClockSource input parameter before enabling the USART clock */
 			/* Hardcoded to HSI for the moment */
-
+			offset = 0;
 			USART1_PCLK_EN();
 		}
 		else if(pUSARTx == USART2)
 		{
 			/* TODO: configure the clock source based on ClockSource input parameter before enabling the USART clock */
 			/* Hardcoded to HSI for the moment */
-
+			offset = 2;
 			USART2_PCLK_EN();
 		}
 		else if(pUSARTx == USART3)
 		{
 			/* TODO: configure the clock source based on ClockSource input parameter before enabling the USART clock */
 			/* Hardcoded to HSI for the moment */
-
+			offset = 4;
 			USART3_PCLK_EN();
 		}
 		else if(pUSARTx == UART4)
 		{
 			/* TODO: configure the clock source based on ClockSource input parameter before enabling the USART clock */
 			/* Hardcoded to HSI for the moment */
-
+			offset = 6;
 			UART4_PCLK_EN();
 		}
 		else if(pUSARTx == UART5)
 		{
 			/* TODO: configure the clock source based on ClockSource input parameter before enabling the USART clock */
 			/* Hardcoded to HSI for the moment */
-
+			offset = 8;
 			UART5_PCLK_EN();
 		}
 		else
@@ -136,6 +138,10 @@ void	USART_PeriphClkControl(USART_RegDef_t *pUSARTx, uint8_t ClockSource, uint8_
 			/* TODO: Should return an error and should not let the code compile. */
 		}
 	}
+
+	/* Selecting corresponding clock source */
+	RCC->RCC_CCIPR &= ~(3U << offset);
+	RCC->RCC_CCIPR |= (ClockSource << offset);
 }
 
 /**************************************************************************//**
