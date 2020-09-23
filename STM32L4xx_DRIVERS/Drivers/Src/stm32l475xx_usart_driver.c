@@ -269,6 +269,35 @@ void	USART_Init(USART_Handle_t *pUSARThandle)
 }
 
 /**************************************************************************//**
+* @brief       This function transmits data over selected USART/UART in polling mode.
+*
+* @param       pUSARTx  		Base address of respective USARTx.
+* @param       pTxBuffer		Pointer to the data to be transmitted.
+* @param	   TxBufferLength	Length of data to be transmitted.
+******************************************************************************/
+void	USART_SendData(USART_RegDef_t *pUSARTx, uint8_t *pTxBuffer, uint32_t TxBufferLength)
+{
+	uint32_t TXcnt = 0;
+	/* TODO: set a limit to the buffer length - return an error if exceeded */
+
+	/* Enabling USART module */
+	SET_REG_BIT(pUSARTx->USART_CR1, REG_BIT_0);
+
+	/* Sending data */
+	for(TXcnt = 0; TXcnt < TxBufferLength; TXcnt++)
+	{
+		pUSARTx->USART_TDR = *(pTxBuffer + TXcnt);								/* This write operation clears the TXE bit */
+		while(USART_GetFlagStatus(pUSARTx, USART_TXE_FLAG) != 1);				/* Wait for the data to be put in the shift register */
+	}
+
+	/* TODO: When TC = 1, an interrupt will be generated. The USARTx will be disabled in the corresponding interrupt handler */
+	while(USART_GetFlagStatus(pUSARTx, USART_TC_FLAG) != 1);					/* Wait for the last transmission to be completed */
+
+	/* Now I can safely disable the USART module */
+	CLR_REG_BIT(pUSARTx->USART_CR1, REG_BIT_0);
+}
+
+/**************************************************************************//**
 * @brief       This function enables/disables the USART/UART module.
 *
 * @param       pUSARTx  Base address of respective USARTx.
