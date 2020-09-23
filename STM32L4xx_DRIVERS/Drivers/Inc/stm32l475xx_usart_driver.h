@@ -87,6 +87,7 @@ extern "C"
 /** @name USART parity macro definitions.
  */
 ///@{
+#define	USART_PARITY_DISABLED		(0U)
 #define	USART_PARITY_ENABLED		(1U)
 #define	USART_PARITY_EVEN			(0U)
 #define	USART_PARITY_ODD			(1U)

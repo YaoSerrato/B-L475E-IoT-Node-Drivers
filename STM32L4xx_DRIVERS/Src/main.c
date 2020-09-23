@@ -34,6 +34,7 @@
 #include <stm32l475xx_gpio_driver.h>
 #include <stm32l475xx_rcc_driver.h>
 #include <stm32l475xx_pwr_driver.h>
+#include <stm32l475xx_usart_driver.h>
 
 /*****************************************************************************/
   /* DEFINES */
@@ -63,18 +64,24 @@
 
 int main()
 {
-  App_RCC_Init();
-  App_GPIO_Init();
-  App_EXTI_Init();
+	/* Data to send */
+	uint8_t BufferTx[] = "All about that base!\n\r";
 
-  /* freq_SYSCLK = RCC_GetSYSCLK(); */
-  /* freq_HCLK = RCC_GetHCLK(); */
+	/* Initialization of peripherals */
+	App_RCC_Init();
+	App_GPIO_Init();
+	App_EXTI_Init();
+	App_USART1_Init();
 
-  while(1)
-  {
-    GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-    delay();
-  }
+	/* freq_SYSCLK = RCC_GetSYSCLK(); */
+	/* freq_HCLK = RCC_GetHCLK(); */
+
+	while(1)
+	{
+		GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+		USART_SendData(USART1,  BufferTx, sizeof(BufferTx));
+		delay();
+	}
 }
 
 /*****************************************************************************/
@@ -88,7 +95,7 @@ int main()
  *****************************************************************************/
 void delay(void)
 {
-  for(uint64_t i = 0 ; i < 20000 ; i++);
+  for(uint64_t i = 0 ; i < 80000 ; i++);
 }
 
  /*************************************************************************//**
@@ -125,7 +132,9 @@ void App_GPIO_Init(void)
   GPIO_Handle_t GPIO_LED2;
   GPIO_Handle_t GPIO_MCO;
   GPIO_Handle_t GPIO_BUTTON;
+  GPIO_Handle_t GPIO_USART1_TX;
 
+  /* PORT B pins */
   /* Configuring user led */
   GPIO_LED2.pGPIOx = GPIOB;
   GPIO_LED2.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
@@ -133,9 +142,21 @@ void App_GPIO_Init(void)
   GPIO_LED2.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_LOW;
   GPIO_LED2.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
   GPIO_LED2.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
+
+  /* Configuring USART1 pins */
+  GPIO_USART1_TX.pGPIOx = GPIOB;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinAltFunMode = GPIO_ALTFN_AF7;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinSpeed = GPIO_OSPEED_HIGH;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinOType = GPIO_OTYPE_PP;
+  GPIO_USART1_TX.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PUPD_NONE;
+
   GPIO_PeriphClkControl(GPIOB, ENABLE);
   GPIO_Init(&GPIO_LED2);
+  GPIO_Init(&GPIO_USART1_TX);
 
+  /* PORT A pins */
   /* Configuring MCO pin */
   GPIO_MCO.pGPIOx = GPIOA;
   GPIO_MCO.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_8;
@@ -147,6 +168,7 @@ void App_GPIO_Init(void)
   GPIO_PeriphClkControl(GPIOA, ENABLE);
   GPIO_Init(&GPIO_MCO);
 
+  /* PORT C pins */
   /* Configuring button */
   GPIO_BUTTON.pGPIOx = GPIOC;
   GPIO_BUTTON.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
@@ -165,6 +187,25 @@ void App_GPIO_Init(void)
 void App_EXTI_Init(void)
 {
   GPIO_IRQConfig(IRQ_NO_EXTI15_10, 0, ENABLE);
+}
+
+/*************************************************************************//**
+* @brief       This function configures the USART peripheral.
+*****************************************************************************/
+void App_USART1_Init(void)
+{
+	USART_Handle_t	USART1_VCP;
+
+	/* Configuring USART1 */
+	USART1_VCP.pUSARTx = USART1;
+	USART1_VCP.USART_config.USART_Mode = USART_MODE_TXONLY;
+	USART1_VCP.USART_config.USART_Baudrate = USART_STD_BAUDRATE_9600;
+	USART1_VCP.USART_config.USART_Oversampling = USART_OVERSAMPLING_16;
+	USART1_VCP.USART_config.USART_ParityControl = USART_PARITY_DISABLED;
+	USART1_VCP.USART_config.USART_StopBits = USART_STOPBITS_10;
+	USART1_VCP.USART_config.USART_WordLength = USART_WORDLENGTH_8;
+	USART_PeriphClkControl(USART1, USART_CLKSOURCE_HSI16, ENABLE);
+	USART_Init(&USART1_VCP);
 }
 
 void Error_Handler(void)
