@@ -44,8 +44,8 @@ extern "C"
  */
 ///@{
 #define	__vo							volatile
-#define	ENABLE							(1UL)
-#define	DISABLE							(0UL)
+#define	ENABLE							(1U)
+#define	DISABLE							(0U)
 #define	SET								ENABLE
 #define	RESET							DISABLE
 #define	GPIO_PIN_SET					SET
@@ -65,52 +65,52 @@ extern "C"
 
 #define NVIC_PRIORITY_BASE_ADDRESS      (__vo uint32_t*)0xE000E400
 
-#define NO_PR_BITS_IMPLEMENTED          (4)
+#define NO_PR_BITS_IMPLEMENTED          (4U)
 ///@}
 
 /** @name Macros for operations with registers.
  */
 ///@{
-#define READ_REG_BIT(REG, N)			((((unsigned) REG) >> (N)) & (1UL))
-#define SET_REG_BIT(REG, N)				(REG |=  (0x1UL << N))
-#define CLR_REG_BIT(REG, N) 			(REG &= ~(0x1UL << N))
+#define READ_REG_BIT(REG, N)			((((unsigned) REG) >> (N)) & (1U))
+#define SET_REG_BIT(REG, N)				(REG |=  (0x1U << N))
+#define CLR_REG_BIT(REG, N) 			(REG &= ~(0x1U << N))
 ///@}
 
 /** @name Register bits macro definitions.
  */
 ///@{
-#define	REG_BIT_0			(0UL)
-#define	REG_BIT_1			(1UL)
-#define	REG_BIT_2			(2UL)
-#define	REG_BIT_3			(3UL)
-#define	REG_BIT_4			(4UL)
-#define	REG_BIT_5			(5UL)
-#define	REG_BIT_6			(6UL)
-#define	REG_BIT_7			(7UL)
-#define	REG_BIT_8			(8UL)
-#define	REG_BIT_9			(9UL)
-#define	REG_BIT_10			(10UL)
-#define	REG_BIT_11			(11UL)
-#define	REG_BIT_12			(12UL)
-#define	REG_BIT_13			(13UL)
-#define	REG_BIT_14			(14UL)
-#define	REG_BIT_15			(15UL)
-#define	REG_BIT_16			(16UL)
-#define	REG_BIT_17			(17UL)
-#define	REG_BIT_18			(18UL)
-#define	REG_BIT_19			(19UL)
-#define	REG_BIT_20			(20UL)
-#define	REG_BIT_21			(21UL)
-#define	REG_BIT_22			(22UL)
-#define	REG_BIT_23			(23UL)
-#define	REG_BIT_24			(24UL)
-#define	REG_BIT_25			(25UL)
-#define	REG_BIT_26			(26UL)
-#define	REG_BIT_27			(27UL)
-#define	REG_BIT_28			(28UL)
-#define	REG_BIT_29			(29UL)
-#define	REG_BIT_30			(30UL)
-#define	REG_BIT_31			(31UL)
+#define	REG_BIT_0			(0U)
+#define	REG_BIT_1			(1U)
+#define	REG_BIT_2			(2U)
+#define	REG_BIT_3			(3U)
+#define	REG_BIT_4			(4U)
+#define	REG_BIT_5			(5U)
+#define	REG_BIT_6			(6U)
+#define	REG_BIT_7			(7U)
+#define	REG_BIT_8			(8U)
+#define	REG_BIT_9			(9U)
+#define	REG_BIT_10			(10U)
+#define	REG_BIT_11			(11U)
+#define	REG_BIT_12			(12U)
+#define	REG_BIT_13			(13U)
+#define	REG_BIT_14			(14U)
+#define	REG_BIT_15			(15U)
+#define	REG_BIT_16			(16U)
+#define	REG_BIT_17			(17U)
+#define	REG_BIT_18			(18U)
+#define	REG_BIT_19			(19U)
+#define	REG_BIT_20			(20U)
+#define	REG_BIT_21			(21U)
+#define	REG_BIT_22			(22U)
+#define	REG_BIT_23			(23U)
+#define	REG_BIT_24			(24U)
+#define	REG_BIT_25			(25U)
+#define	REG_BIT_26			(26U)
+#define	REG_BIT_27			(27U)
+#define	REG_BIT_28			(28U)
+#define	REG_BIT_29			(29U)
+#define	REG_BIT_30			(30U)
+#define	REG_BIT_31			(31U)
 
 #define	BIT_POS_0			REG_BIT_0
 #define	BIT_POS_1			REG_BIT_1
@@ -203,21 +203,29 @@ extern "C"
 #define	RNG_BASE_ADDRESS		(AHB2PERIPH_BASE_ADDRESS + 0x08060800U)
 ///@}
 
+
+/** @name Base addresses of APB1 Peripherals.
+ */
+///@{
+#define	SPI2_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3800U)
+#define	SPI3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3C00U)
+#define USART2_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4400U)
+#define USART3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4800U)
+#define UART4_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x4C00U)
+#define UART5_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x5000U)
+#define	PWR_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x7000U)
+///@}
+
+
 /** @name Base addresses of APB2 Peripherals.
  */
 ///@{
 #define	SYSCFG_BASE_ADDRESS		(APB2PERIPH_BASE_ADDRESS + 0x0000U)
 #define EXTI_BASE_ADDRESS       (APB2PERIPH_BASE_ADDRESS + 0x400U)
 #define SPI1_BASE_ADDRESS       (APB2PERIPH_BASE_ADDRESS + 0x3000U)
+#define USART1_BASE_ADDRESS		(APB2PERIPH_BASE_ADDRESS + 0x3800U)
 ///@}
 
-/** @name Base addresses of APB1 Peripherals.
- */
-///@{
-#define	PWR_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x7000U)
-#define	SPI2_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3800U)
-#define	SPI3_BASE_ADDRESS		(APB1PERIPH_BASE_ADDRESS + 0x3C00U)
-///@}
 
 /*****************************************************************************/
   /* TYPEDEFS */
@@ -566,6 +574,71 @@ typedef struct  /**< Peripheral register definition structure for SPIx */
 #define SPI3_REG_RESET()			do{ (RCC->RCC_APB1RSTR1 |= (1 << BIT_POS_15));\
 										(RCC->RCC_APB1RSTR1 &= ~(1 << BIT_POS_15)); }while(0)
 ///@}
+
+
+/* ----------------------------------------------------------- USART ----------------------------------------------------------- */
+typedef struct  /**< Peripheral register definition structure for USARTx */
+{
+  __vo uint32_t USART_CR1;		/* Address offset:	0x00 */
+  __vo uint32_t USART_CR2;		/* Address offset:	0x04 */
+  __vo uint32_t USART_CR3;		/* Address offset:	0x08 */
+  __vo uint32_t USART_BRR;		/* Address offset:	0x0C */
+  __vo uint32_t USART_GTPR;		/* Address offset:	0x10 */
+  __vo uint32_t USART_RTOR;		/* Address offset:	0x14 */
+  __vo uint32_t USART_RQR;		/* Address offset:	0x18 */
+  __vo uint32_t USART_ISR;		/* Address offset:	0x1C */
+  __vo uint32_t USART_ICR;		/* Address offset:	0x20 */
+  __vo uint32_t USART_RDR;		/* Address offset:	0x24 */
+  __vo uint32_t USART_TDR;		/* Address offset:	0x28 */
+}USART_RegDef_t;
+
+/** @name USART registers base addresses.
+ */
+///@{
+#define	USART1				((USART_RegDef_t*) USART1_BASE_ADDRESS)
+#define	USART2				((USART_RegDef_t*) USART2_BASE_ADDRESS)
+#define	USART3				((USART_RegDef_t*) USART3_BASE_ADDRESS)
+#define	UART4				((USART_RegDef_t*) UART4_BASE_ADDRESS)
+#define	UART5				((USART_RegDef_t*) UART5_BASE_ADDRESS)
+///@}
+
+/** @name Clock enable/disable macros for USARTx peripherals.
+ */
+///@{
+//#define	USART1_PCLK_EN()			(RCC->RCC_APB2ENR |= (1 << BIT_POS_14))
+
+#define USART1_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB2ENR, BIT_POS_14)
+#define	USART2_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_17)
+#define	USART3_PCLK_EN()			SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_18)
+#define	UART4_PCLK_EN()				SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_19)
+#define	UART5_PCLK_EN()				SET_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_20)
+
+#define	USART1_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB2ENR, BIT_POS_14)
+#define	USART2_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_17)
+#define	USART3_PCLK_DI()			CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_18)
+#define	UART4_PCLK_DI()				CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_19)
+#define	UART5_PCLK_DI()				CLR_REG_BIT(RCC->RCC_APB1ENR1, BIT_POS_20)
+///@}
+
+/** @name USART registers reset macros.
+ */
+///@{
+#define USART1_REG_RESET()			do{ SET_REG_BIT(RCC->RCC_APB2RSTR, BIT_POS_14);\
+										CLR_REG_BIT(RCC->RCC_APB2RSTR, BIT_POS_14);}while(0);
+
+#define USART2_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_17);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_17);}while(0);
+
+#define USART3_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_18);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_18);}while(0);
+
+#define UART4_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_19);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_19);}while(0);
+
+#define UART5_REG_RESET()			do{	SET_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_20);\
+										CLR_REG_BIT(RCC->RCC_APB1RSTR1, BIT_POS_20);}while(0);
+///@}
+
 
 
 /*****************************************************************************/

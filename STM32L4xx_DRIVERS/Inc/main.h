@@ -31,6 +31,7 @@ extern "C"
 /*****************************************************************************/
   /* INCLUDES */
 /*****************************************************************************/
+#include <BuildConfiguration.h>
 
 /*****************************************************************************/
   /* DEFINES */
@@ -52,6 +53,7 @@ void delay(void);
 void App_RCC_Init(void);
 void App_GPIO_Init(void);
 void App_EXTI_Init(void);
+void App_USART1_Init(void);
 void Error_Handler(void);
 void EXTI0_IRQHandler(void);
 
